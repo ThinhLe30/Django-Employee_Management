@@ -1,0 +1,134 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap");
+
+*,
+*::after,
+*::before {
+  padding: 0;
+  margin: 0;
+  font-family: "Inter", sans-serif;
+}
+
+input,
+button {
+  border: 0;
+  border-radius: 0.25rem;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-width: 100vw;
+  min-height: 100vh;
+  background-color: rgba(208, 235, 255, 0.333);
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.logo {
+  width: 64px;
+  height: 100%;
+}
+
+.title {
+  color: #3c91e6;
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 2rem;
+  margin-top: 1rem;
+  text-shadow: #3c91e6 1px 0 2px;
+  letter-spacing: 1.5px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  max-width: 400px;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.label-username,
+.label-password {
+  display: flex;
+}
+
+.label-username,
+.label-password {
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.username-span,
+.password-span {
+  color: #000;
+  font-weight: 600;
+  line-height: 1.25rem;
+}
+
+.input-username-container,
+.input-password-container {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  background-color: #fff;
+  box-shadow: 0 4px 8px -2px rgb(239, 239, 239);
+  border-radius: 18px;
+}
+
+.input-username-container:focus-within,
+.input-password-container:focus-within {
+  box-shadow: inset 0 0 0 calc(2px + 0px) #3c91e6;
+}
+
+.input-username-container i,
+.input-password-container i {
+  font-size: 24px;
+}
+
+.input-username,
+.input-password {
+  font-size: 0.875rem;
+  line-height: 1rem;
+  color: #000;
+  background-color: transparent;
+  outline: none;
+  flex: 1;
+  position: relative;
+}
+
+.input-username::placeholder,
+.input-password::placeholder {
+  color: #63656a;
+}
+
+.input-password::placeholder {
+  position: absolute;
+  top: 2px;
+}
+
+.btn-log-in {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem 1rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  color: #fff;
+  background: #3c91e6;
+  cursor: pointer;
+  box-shadow: 0px 6px 15px 0px rgba(34, 139, 230, 0.5);
+  border-radius: 18px;
+}
+
+.btn-log-in:hover {
+  background-color: #4dabf7;
+}
