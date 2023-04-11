@@ -1,4 +1,7 @@
 {% extends 'index.html' %}
 {% block content %}
-    <h1>This is Employee List</h1>
+    <p>This is Employee List</p>
+    {% for emp in employees %}
+        <h2>{{emp.email}}</h2>
+    {% endfor %}
 {% endblock content %}
