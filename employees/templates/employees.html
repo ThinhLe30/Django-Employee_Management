@@ -44,11 +44,11 @@
     <thead>
       <tr>
         <th>#</th>
-        <th><a href="/employees/list?keyword={{keyword}}&sort={{reverseSortField}}&sortField=lastName">Name</a></th>
-        <th><a href="/employees/list?keyword={{keyword}}&sort={{reverseSortField}}&sortField=email">Email</a></th>
-        <th><a href="/employees/list?keyword={{keyword}}&sort={{reverseSortField}}&sortField=phone">Phone</a></th>
-        <th><a href="/employees/list?keyword={{keyword}}&sort={{reverseSortField}}&sortField=address">Address</a></th>
-        <th><a href="/employees/list?keyword={{keyword}}&sort={{reverseSortField}}&sortField=department">Department</a></th>
+        <th><a href="/employees/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=lastName">Name <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+        <th><a href="/employees/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=email">Email <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+        <th><a href="/employees/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=phone">Phone <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+        <th><a href="/employees/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=address">Address <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+        <th><a href="/employees/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=department">Department <i class="fa fa-sort" aria-hidden="true"></i></a></th>
         <th></th>
       </tr>
     </thead>
@@ -103,7 +103,7 @@
   <ul class="pagination">
     <li class="page-item">
         <a class="page-control link-back"
-        href="/employees/list/?{% if pageNum == 1 %}page={{ pageNum }}{% else %}page={{pageNum|add:-1 }}{% endif %}&keyword={{keyword}}&sort={{sort}}&sortField={{sortField}}">
+        href="/employees/list/?{% if pageNum == 1 %}page={{ pageNum}}{% else %}page={{pageNum|add:-1 }}{% endif %}&keyword={{keyword}}&sort={{sort}}&sortField={{sortField}}">
             <i class="fa-solid fa-arrow-left-long"></i
             ></a>
     </li>
