@@ -26,7 +26,7 @@ def showEmployeesList(request):
         sortField = "lastName"
     employees = Employee.objects.all()
     if keyword:
-        # | Q(lastName=keyword) | Q(phone=keyword) | Q(email=keyword) | Q(birthday=keyword) | Q(address=keyword) | Q(department=keyword) | Q(salary=keyword)
+        # | Q(lastName=keyword) | %like Q(phone=keyword) | Q(email=keyword) | Q(birthday=keyword) | Q(address=keyword) | Q(department=keyword) | Q(salary=keyword)
         employees = employees.filter(Q(firstName__icontains=keyword) | Q(lastName__icontains=keyword) | Q(phone__icontains=keyword) | Q(email__icontains=keyword) | Q(address__icontains=keyword) | Q(department__name__icontains=keyword))
     if sort == "asc" and sortField:
         employees = employees.order_by(sortField)
@@ -35,7 +35,7 @@ def showEmployeesList(request):
     total = employees.count()
     start = (page_num - 1) * per_page
     end = page_num * per_page
-    if end > total :
+    if end > total : 
         end = total
     totalPage = math.ceil(total / per_page)
     employees = employees[start : end]
