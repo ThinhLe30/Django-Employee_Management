@@ -9,6 +9,7 @@ from django.core import serializers
 from django.db.models import Q
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
 import json
 # Create your views here.
 def showEmployeesList(request):
@@ -130,5 +131,22 @@ def deleteEmployee(request, id):
     employee.delete()
     messages.success(request, 'The employee was deleted successfully.')
     return redirect('/employees/list')
-
-    
+@csrf_exempt
+def checkDuplicateEmailAndPhone(request):
+    if request.method == 'POST':
+        payload = request.body.decode('utf-8')
+        data = json.loads(payload)
+        id = int(data['id'])
+        email = data['email']
+        phone = data['phone']
+        if id == 0:
+            if Employee.objects.filter(email=email).exists() | Employee.objects.filter(phone=phone).exists():
+                response = "Duplicated"
+            else:
+                response = "Ok"
+        else:
+            if Employee.objects.filter(email=email).exclude(id=id).exists() | Employee.objects.filter(phone=phone).exclude(id=id).exists():
+                response = "Duplicated"
+            else:
+                response = "Ok"
+        return JsonResponse(response, safe=False)
