@@ -7,5 +7,6 @@ urlpatterns = [
     path('add/',views.showEmployeeForm, name ='add'),
     path('edit/<int:id>/', views.showEmployeeForm, name='edit'),
     path('delete/<int:id>/', views.deleteEmployee, name='delete'),
-    path('save/',views.saveEmployee, name ='save')
+    path('save/',views.saveEmployee, name ='save'),
+    path('checkDuplicate/',views.checkDuplicateEmailAndPhone, name ='checkDuplicate')
 ]

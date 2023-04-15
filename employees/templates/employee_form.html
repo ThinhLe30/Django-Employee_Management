@@ -10,9 +10,10 @@
               method="post" action="/employees/save/"
               style="max-width: 700px; margin: 0 auto"
               enctype="multipart/form-data"
+              onsubmit="return checkDuplicate(this);"
         >
             {% csrf_token %}
-            <input type="hidden" name ="id" value="{{id}}">
+            <input type="hidden" name ="id" value="{{id}}" id = "id">
             <label for="firstname" class="label-input">
                 <span class="input-span">Firstname</span>
                 <div class="input-container">
@@ -172,8 +173,67 @@
         </form>
     </div>
 </div>
+<div id="messageModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header bg-primary">
+                    <h4 class="modal-title">Duplicated Email or Phone</h4>
+                    <button
+                            type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-hidden="true"
+                    >
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Another employee are currently using the email or phone number you have been entered. Please choose another one!</p>
+                </div>
+                <div class="modal-footer">
+                    <input
+                            type="button"
+                            class="btn btn-default"
+                            data-dismiss="modal"
+                            value="Ok"
+                    />
+                </div>
+            </form>
+        </div>
+    </div>
+  </div>
 </div>
 <script>
+    function checkDuplicate(form){
+        phone = ""+$('#phone').val()
+        id = ""+$('#id').val()
+        email = ""+$('#email').val()
+        $.ajax({
+                method : 'POST',
+                url: 'http://127.0.0.1:8000/employees/checkDuplicate/',
+                data: JSON.stringify({
+                    phone: phone,
+                    id: id,
+                    email: email
+                }),
+                contentType: 'application/json',
+                success: function(response) {
+                    if(response == "Ok"){
+                        form.submit();
+                        return true;
+                    }else{
+                        $("#messageModal").modal()
+                        return false;
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert(status);
+                    alert(error);
+                }
+            });
+        return false;
+    }
     function previewFile(input) {
         var file = $("input[type=file]").get(0).files[0];
         if(file) {

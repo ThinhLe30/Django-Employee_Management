@@ -4,7 +4,7 @@
     <div class="tabel-title">
       <p>Manage</p>
       <i class="fa-solid fa-circle"></i>
-      <p class="text">Employee</p>
+      <a href="{% url 'employees:list' %}" style="text-decoration: none !important;"><p class="text">Employee</p></a>
     </div>
     <div class="table-control">
       <div class="search">
@@ -238,7 +238,6 @@
         let img = response.data.image
         let img_src = `{% static "image/avatar/img" %}`;
         img_src = img_src.replace("img", img);        
-        console.log(img_src);
                 $(`#name`).html(response.data.name);
                 $(`#email`).html(response.data.email);
                 $(`#birthday`).html(response.data.birthday);
