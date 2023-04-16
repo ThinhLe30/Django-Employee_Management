@@ -130,7 +130,7 @@ def deleteEmployee(request, id):
     employee = Employee.objects.get(pk=id)
     employee.delete()
     messages.success(request, 'The employee was deleted successfully.')
-    return redirect('/employees/list')
+    return redirect('/employees/list/')
 @csrf_exempt
 def checkDuplicateEmailAndPhone(request):
     if request.method == 'POST':
