@@ -24,5 +24,5 @@ urlpatterns = [
     path('employees/', include('employees.urls', namespace="employees")),
     path('departments/', include('departments.urls', namespace="departments")),
     # path('salaries/', include('salaries.urls', namespace="salaries")),
-    # path('admins/', include('admin.urls', namespace="admin"))
+    path('admins/', include('admins.urls', namespace="admins"))
 ]

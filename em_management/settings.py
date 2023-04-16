@@ -85,11 +85,11 @@ WSGI_APPLICATION = 'em_management.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', 
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'django_em_management',
-        'USER': 'hbstudent',
-        'PASSWORD': 'hbstudent',
-        'HOST': 'localhost',  
+        'USER': 'root',
+        'PASSWORD': 'nvvuong47',
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }
@@ -131,7 +131,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = (
-BASE_DIR/'static',
+    BASE_DIR/'static',
 )
 # STATICFILES_DIRS = [
 #    os.path.join(BASE_DIR, 'em_management/static/')

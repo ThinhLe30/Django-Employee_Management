@@ -142,7 +142,6 @@ body {
   padding: 30px 0 20px;
   display: flex;
   align-items: center;
-  /* background-color: #ccc; */
   box-shadow: 0 4px 5px -2px rgb(241, 243, 245, 0.5);
 }
 .tabel-title p {
@@ -228,9 +227,9 @@ table.table tr td:first-child {
 table.table tr:hover td:first-child {
   border-left: solid 4px #0067c0;
 }
-table.table tr:hover .td-mail {
+table.table tr:hover .td-mail,
+table.table tr:hover .td-username {
   color: #339af0;
-  font-weight: bold;
 }
 table.table td a {
   font-weight: bold;
