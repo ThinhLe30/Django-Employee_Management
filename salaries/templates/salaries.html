@@ -4,7 +4,7 @@
     <div class="tabel-title">
       <p>Manage</p>
       <i class="fa-solid fa-circle"></i>
-      <a href="{% url 'employees:list' %}" style="text-decoration: none !important;"><p class="text">Employee</p></a>
+      <a href="{% url 'salaries:list' %}" style="text-decoration: none !important;"><p class="text">Employee</p></a>
     </div>
     <div class="table-control">
       <div class="search">
@@ -22,10 +22,10 @@
         <i class="search-icon fa-solid fa-magnifying-glass"></i>
       </div>
       <div class="add">
-        <a href="{% url 'employees:add' %}" class="btn" data-toggle="modal">
+        <a href="{% url 'salaries:add' %}" class="btn" data-toggle="modal">
           <div class="tooltip">
             <i class="add-icon fa-solid fa-plus"></i>
-            <p class="tooltiptext">Add new employee</p>
+            <p class="tooltiptext">Add new salary level</p>
           </div></a
         >
       </div>
@@ -44,34 +44,26 @@
     <thead>
       <tr>
         <th>#</th>
-        <th><a href="/employees/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=lastName">Name <i class="fa fa-sort" aria-hidden="true"></i></a></th>
-        <th><a href="/employees/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=email">Email <i class="fa fa-sort" aria-hidden="true"></i></a></th>
-        <th><a href="/employees/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=phone">Phone <i class="fa fa-sort" aria-hidden="true"></i></a></th>
-        <th><a href="/employees/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=address">Address <i class="fa fa-sort" aria-hidden="true"></i></a></th>
-        <th><a href="/employees/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=department">Department <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+        <th><a href="/salaries/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=basicSalary">Basic Salary <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+        <th><a href="/salaries/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=coefficientPay">Coefficient Pay <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+        <th><a href="/salaries/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=coefficientAllowance"> Coefficient Allowance <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+       
         <th></th>
       </tr>
     </thead>
     <tbody>
-      {% for emp in employees %}
+      {% for sal in level_salaries %}
       <tr>
         <td>{{forloop.counter}}</td>
-        <td class= "td-name">
-          <img
-                        src="{% static 'image/avatar/' %}{{ emp.image }}"
-                        class="avatar"
-                        alt="Avatar"
-                />
-          {{emp.firstName}} {{emp.lastName}}</td>
-        <td class="td-mail">{{emp.email}}</td>
-        <td>{{emp.phone}}</td>
-        <td>{{emp.address}}</td>
-        <td>{{emp.department}}</td>
+    
+        <td>{{sal.basicSalary}}</td>
+        <td>{{sal.coefficientPay}}</td>
+        <td>{{sal.coefficientAllowance}}</td>
         <td class="td-action">
           <a
             href="#"
             id="detail-toggle-link"
-            onclick="return fetchEmployeeDetail(`{{emp.id}}`);"
+            onclick="return fetchLevel_SalaryDetail(`{{sal.id}}`);"
             class="edit"
           >
             <div class="tooltip">
@@ -79,13 +71,13 @@
               <p class="tooltiptext">Info detail</p>
             </div>
           </a>
-          <a href="/employees/edit/{{emp.id}}/" class="edit" data-toggle="modal">
+          <a href="/salaries/edit/{{sal.id}}/" class="edit" data-toggle="modal">
             <div class="tooltip">
               <i class="edit-icon fa-solid fa-pen-to-square"></i>
               <p class="tooltiptext">Edit</p>
             </div></a
           >
-          <a href="/employees/delete/{{emp.id}}/" class="delete link-delete" data-toggle="modal">
+          <a href="/salaries/delete/{{sal.id}}/" class="delete link-delete" data-toggle="modal">
             <div class="tooltip">
               <i class="delete-icon fa-solid fa-trash"></i>
               <p class="tooltiptext">Delete</p>
@@ -96,25 +88,25 @@
       </tr>
     </tbody>
   </table>
-  {% if not employees %}
+  {% if not level_salaries %}
   <h3><p class="text text-center">No matches found.</p></h3>
   {% endif %}
   {% if  totalPage > 1%}
   <ul class="pagination">
     <li class="page-item">
         <a class="page-control link-back"
-        href="/employees/list/?{% if pageNum == 1 %}page={{ pageNum}}{% else %}page={{pageNum|add:-1 }}{% endif %}&keyword={{keyword}}&sort={{sort}}&sortField={{sortField}}">
+        href="/salaries/list/?{% if pageNum == 1 %}page={{ pageNum}}{% else %}page={{pageNum|add:-1 }}{% endif %}&keyword={{keyword}}&sort={{sort}}&sortField={{sortField}}">
             <i class="fa-solid fa-arrow-left-long"></i
             ></a>
     </li>
     {% for i in range %}
         <li class="page-item {% if i == pageNum %}active{% endif %}"><a 
-          href="/employees/list/?page={{i}}&keyword={{keyword}}&sort={{sort}}&sortField={{sortField}}"
+          href="/salaries/list/?page={{i}}&keyword={{keyword}}&sort={{sort}}&sortField={{sortField}}"
           class="page-link">{{i}}</a></li>
     {% endfor %}
     <li class="page-item">
         <a class="page-control link-next"
-        href="/employees/list/?{% if pageNum == totalPage %}page={{ pageNum }}{% else %}page={{pageNum|add:1 }}{% endif %}&keyword={{keyword}}&sort={{sort}}&sortField={{sortField}}">
+        href="/salaries/list/?{% if pageNum == totalPage %}page={{ pageNum }}{% else %}page={{pageNum|add:1 }}{% endif %}&keyword={{keyword}}&sort={{sort}}&sortField={{sortField}}">
             <i class="fa-solid fa-arrow-right-long"></i
             ></a>
     </li>
@@ -122,7 +114,7 @@
   {% endif %}
   
 </div>
-<div id="infoEmployeeModal" class="modal fade">
+<div id="infoLevel_SalaryModal" class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content">
       <form>
@@ -139,47 +131,22 @@
         </div>
         {% csrf_token %}
         <div class="modal-body">
+         
           <div class="form-group">
-            <label></label>
-            <img
-              id="image"
-              class="avatar"
-              alt="Avatar"
-              src="{% static 'image/avatar/1.jpg' %}"
-            />
+            <label>Basic Salary: </label>
+            <span id="basicSalary"></span>
           </div>
           <div class="form-group">
-            <label>Name: </label>
-            <span id="name"></span>
+            <label>Coefficient Pay:</label>
+            <span id="coefficientPay"></span>
           </div>
+
           <div class="form-group">
-            <label>Email:</label>
-            <span id="email"></span>
+            <label>Coefficient Allowance: </label>
+            <span id="coefficientAllowance"></span>
           </div>
-          <div class="form-group">
-            <label>Birthday: </label>
-            <span id="birthday"></span>
-          </div>
-          <div class="form-group">
-            <label>Address: </label>
-            <span id="address"></span>
-          </div>
-          <div class="form-group">
-            <label>Gender: </label>
-            <span id="gender"></span>
-          </div>
-          <div class="form-group">
-            <label>Phone: </label>
-            <span id="phone"></span>
-          </div>
-          <div class="form-group">
-            <label for="department">Department: </label>
-            <span id="department"></span>
-          </div>
-          <div class="form-group">
-            <label for="salary">Salary</label>
-            <span id="salary"></span>
-          </div>
+
+         
         </div>
         <div class="modal-footer">
           <input
@@ -193,12 +160,12 @@
     </div>
   </div>
 </div>
-<div id="deleteEmployeeModal" class="modal fade">
+<div id="deleteLevel_SalaryModal" class="modal fade">
   <div class="modal-dialog">
       <div class="modal-content">
           <form>
               <div class="modal-header">
-                  <h4 class="modal-title">Delete Employee</h4>
+                  <h4 class="modal-title">Delete Level Salary</h4>
                   <button
                           type="button"
                           class="close"
@@ -209,7 +176,7 @@
                   </button>
               </div>
               <div class="modal-body">
-                  <p>Are you sure you want to delete this employee?</p>
+                  <p>Are you sure you want to delete this level salary?</p>
                   <p class="text-warning">
                       <small>This action cannot be undone.</small>
                   </p>
@@ -228,27 +195,17 @@
   </div>
 </div>
 <script>
-  function fetchEmployeeDetail(id) {
+  function fetchLevel_SalaryDetail(id) {
     var csrf = $("input[name=csrfmiddlewaretoken]").val();
     $.ajax({
-      url: "http://127.0.0.1:8000/employees/detail/"+id+"/",
+      url: "http://127.0.0.1:8000/salaries/detail/"+id+"/",
       method: "GET",
       success: function (response) {
-        // response = JSON.parse(response)
-        let img = response.data.image
-        let img_src = `{% static "image/avatar/img" %}`;
-        img_src = img_src.replace("img", img);        
-                $(`#name`).html(response.data.name);
-                $(`#email`).html(response.data.email);
-                $(`#birthday`).html(response.data.birthday);
-                $(`#address`).html(response.data.address);
-                let gender =  response.data.gender === true ? "Male" : "Female";
-                $(`#gender`).html(gender);
-                $(`#phone`).html(response.data.phone);
-                $(`#image`).attr("src", img_src);
-                $(`#department`).html(response.data.department);
-                $(`#salary`).html(response.data.salary);
-                $("#infoEmployeeModal").modal();
+        // response = JSON.parse(response) 
+        $(`#basicSalary`).html(response.data.basicSalary);
+        $(`#coefficientPay`).html(response.data.coefficientPay);
+        $(`#coefficientAllowance`).html(response.data.coefficientAllowance);
+        $("#infoLevel_SalaryModal").modal();
       },
       error: function (error) {
           console.log(error);
@@ -266,7 +223,7 @@
     }
     $(".link-delete").click(function(e){
       e.preventDefault()
-      $("#deleteEmployeeModal").modal()
+      $("#deleteLevel_SalaryModal").modal()
       $(".but-delete").attr("href",$(this).attr("href"));
     })
    })

@@ -9,6 +9,7 @@ from django.core import serializers
 from django.db.models import Q
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
 import json
 # Create your views here.
 def showEmployeesList(request):
@@ -26,7 +27,7 @@ def showEmployeesList(request):
         sortField = "lastName"
     employees = Employee.objects.all()
     if keyword:
-        # | Q(lastName=keyword) | %like Q(phone=keyword) | Q(email=keyword) | Q(birthday=keyword) | Q(address=keyword) | Q(department=keyword) | Q(salary=keyword)
+        # | Q(lastName=keyword) | %like% Q(phone=keyword) | Q(email=keyword) | Q(birthday=keyword) | Q(address=keyword) | Q(department=keyword) | Q(salary=keyword)
         employees = employees.filter(Q(firstName__icontains=keyword) | Q(lastName__icontains=keyword) | Q(phone__icontains=keyword) | Q(email__icontains=keyword) | Q(address__icontains=keyword) | Q(department__name__icontains=keyword))
     if sort == "asc" and sortField:
         employees = employees.order_by(sortField)
@@ -129,6 +130,23 @@ def deleteEmployee(request, id):
     employee = Employee.objects.get(pk=id)
     employee.delete()
     messages.success(request, 'The employee was deleted successfully.')
-    return redirect('/employees/list')
-
-    
+    return redirect('/employees/list/')
+@csrf_exempt
+def checkDuplicateEmailAndPhone(request):
+    if request.method == 'POST':
+        payload = request.body.decode('utf-8')
+        data = json.loads(payload)
+        id = int(data['id'])
+        email = data['email']
+        phone = data['phone']
+        if id == 0:
+            if Employee.objects.filter(email=email).exists() | Employee.objects.filter(phone=phone).exists():
+                response = "Duplicated"
+            else:
+                response = "Ok"
+        else:
+            if Employee.objects.filter(email=email).exclude(id=id).exists() | Employee.objects.filter(phone=phone).exclude(id=id).exists():
+                response = "Duplicated"
+            else:
+                response = "Ok"
+        return JsonResponse(response, safe=False)
