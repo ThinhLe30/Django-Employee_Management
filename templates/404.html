@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 {% load static %}
 {% block content %}
-<div class="table-responsive">
+<div class="container">
 <div class="error">
     <div class="error-info">
         <span>404 error </span>
@@ -16,7 +16,7 @@
         <a class="error-btn-homepage" href="{% url 'home:home' %}">Home page</a>
     </div>
     <div class="error-img">
-        {% comment %} <img src="{% static 'image/error/404error.svg' %}" /> {% endcomment %}
+        <img src="{% static 'image/error/404error.svg' %}" />
     </div>
 </div>
 </div>
