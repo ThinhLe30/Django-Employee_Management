@@ -23,6 +23,6 @@ urlpatterns = [
     path('home/', include('home.urls', namespace="home")),
     path('employees/', include('employees.urls', namespace="employees")),
     path('departments/', include('departments.urls', namespace="departments")),
-    # path('salaries/', include('salaries.urls', namespace="salaries")),
+    path('salaries/', include('salaries.urls', namespace="salaries")),
     # path('admins/', include('admin.urls', namespace="admin"))
 ]
