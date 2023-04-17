@@ -228,9 +228,8 @@ table.table tr td:first-child {
 table.table tr:hover td:first-child {
   border-left: solid 4px #0067c0;
 }
-table.table tr:hover .td-mail {
+table.table tr:hover .td-name {
   color: #339af0;
-  font-weight: bold;
 }
 table.table td a {
   font-weight: bold;
@@ -270,8 +269,14 @@ table.table .avatar {
 table.table .td-name {
   font-weight: bold;
 }
+table.table .td-desc {
+  max-width: 450px;
+}
 table.table .td-action {
   padding: 12px 0 !important;
+}
+table.table .tr-depart .td-action {
+  padding-left: 20px !important;
 }
 .search {
   justify-self: end;
