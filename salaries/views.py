@@ -24,9 +24,14 @@ def showLevel_SalariesList(request):
     if not sortField:
         sortField = "basicSalary"
     level_salaries = Level_Salary.objects.all()
+    print(level_salaries)
+
+    for level_salarie in level_salaries:
+        level_salarie.basicSalary = str(int(level_salarie.basicSalary))
+    print(level_salaries)
     if keyword:
         # | Q(lastName=keyword) | %like Q(phone=keyword) | Q(email=keyword) | Q(birthday=keyword) | Q(address=keyword) | Q(department=keyword) | Q(salary=keyword)
-         level_salaries =  level_salaries.filter(Q( basicSalary__icontains=keyword) | Q(coefficientPay__icontains=keyword) | Q(coefficientAllowance__icontains=keyword) )
+         level_salaries =  level_salaries.filter(Q( basicSalary__icontains=keyword.split('.')[0]) | Q(coefficientPay__icontains=keyword) | Q(coefficientAllowance__icontains=keyword) )
     if sort == "asc" and sortField:
         level_salaries = level_salaries.order_by(sortField)
     if sort == "desc" and sortField:
@@ -96,7 +101,7 @@ def saveLevel_Salary(request):
             salary.save()
             messages.success(request, 'The salary level was edited successfully.')
         # return render(request, "checkform.html", context)
-        return redirect("/salaries/list/?keyword="+ basicSalary)
+        return redirect("/salaries/list/?keyword="+ basicSalary.split('.')[0])
 def deleteLevel_Salary(request, id):
     salary = Level_Salary.objects.get(pk=id)
     salary.delete()
