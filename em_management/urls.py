@@ -21,16 +21,16 @@ from django.conf.urls.static import static
 from admins.admin import admin_site
 
 urlpatterns = [
-    path('', lambda request: redirect('home:home'), name='index'),
-    # path('admin/', admin.site.urls),
-    path('em_admin/', admin_site.urls),
     path('home/', include('home.urls', namespace="home")),
     path('employees/', include('employees.urls', namespace="employees")),
     path('departments/', include('departments.urls', namespace="departments")),
-    # path('salaries/', include('salaries.urls', namespace="salaries")),
     path('admins/', include('admins.urls', namespace="admins")),
     path('salaries/', include('salaries.urls', namespace="salaries")),
     path('', include("django.contrib.auth.urls")), 
+    path('auth/', admin_site.urls),
+    path('', lambda request: redirect('/home/'), name='index'),
 ]
+urlpatterns += static(settings.STATIC_URL, 
+ document_root=settings.STATIC_ROOT)
 handler404="handle_error.views.handle_404"
 handler500="handle_error.views.handle_500"

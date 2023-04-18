@@ -1,9 +1,9 @@
 from django.db import models
-class AdminApp(models.Model):
-    username = models.CharField(max_length=64)
-    password = models.CharField(max_length=64)
-    first_name = models.CharField(max_length=64)
-    last_name = models.CharField(max_length=64)
-    phone = models.CharField(max_length=15)
+from django.contrib.auth.models import AbstractUser
+from employees.models import Employee
+
+class AdminApp(AbstractUser):
+    username = models.CharField(max_length=64, unique=True)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, null=True, default=1)
     class Meta:
         db_table = "admins"

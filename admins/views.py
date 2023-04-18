@@ -10,9 +10,6 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-<<<<<<< HEAD
-# Create your views here.
-=======
 
 def showAdminsList(request):
     per_page = 9
@@ -138,4 +135,3 @@ def checkDuplicateUsernameAndPhone(request):
             else:
                 response = "Ok"
         return JsonResponse(response, safe=False)
->>>>>>> 70a037831d0011909c81485d5956bd2691210a81
