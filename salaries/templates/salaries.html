@@ -4,7 +4,7 @@
     <div class="tabel-title">
       <p>Manage</p>
       <i class="fa-solid fa-circle"></i>
-      <a href="{% url 'salaries:list' %}" style="text-decoration: none !important;"><p class="text">Employee</p></a>
+      <a href="{% url 'salaries:list' %}" style="text-decoration: none !important;"><p class="text">Level Salary</p></a>
     </div>
     <div class="table-control">
       <div class="search">
@@ -62,7 +62,7 @@
         <td>{{sal.coefficientPay}}</td>
         <td>{{sal.coefficientAllowance}}</td>
         <td class="td-action">
-          <a
+          <!-- <a
             href="#"
             id="detail-toggle-link"
             onclick="return fetchLevel_SalaryDetail(`{{sal.id}}`);"
@@ -72,8 +72,12 @@
               <i class="info-icon fa-solid fa-circle-info"></i>
               <p class="tooltiptext">Info detail</p>
             </div>
+<<<<<<< HEAD
           </a>
           {% if user.is_authenticated %}
+=======
+          </a> -->
+>>>>>>> 70a037831d0011909c81485d5956bd2691210a81
           <a href="/salaries/edit/{{sal.id}}/" class="edit" data-toggle="modal">
             <div class="tooltip">
               <i class="edit-icon fa-solid fa-pen-to-square"></i>
@@ -123,7 +127,7 @@
     <div class="modal-content">
       <form>
         <div class="modal-header">
-          <h4 class="modal-title">Infomation Of Employee</h4>
+          <h4 class="modal-title">Infomation Of Level Salary</h4>
           <button
             type="button"
             class="close"
