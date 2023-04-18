@@ -61,7 +61,7 @@
         <th>
           <a
             href="/admins/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=password"
-            >Password <i class="fa fa-sort" aria-hidden="true"></i
+            >Gender <i class="fa fa-sort" aria-hidden="true"></i
           ></a>
         </th>
         <th>
@@ -77,10 +77,10 @@
       {% for ad in admins %}
       <tr>
         <td>{{forloop.counter}}</td>
-        <td class="td-name">{{ad.first_name}} {{ad.last_name}}</td>
+        <td class="td-name">{{ad.employee.firstName}} {{ad.employee.lastName}}</td>
         <td class="td-username">{{ad.username}}</td>
-        <td>{{ad.password}}</td>
-        <td>{{ad.phone}}</td>
+        <td>{% if ad.employee.gender %} Male {%else %} Female {% endif %}</td>
+        <td>{{ad.employee.phone}}</td>
         <td class="td-action">
           <a
             href="#"
@@ -170,10 +170,6 @@
           <div class="form-group">
             <label>Username:</label>
             <span id="username"></span>
-          </div>
-          <div class="form-group">
-            <label>Password: </label>
-            <span id="password"></span>
           </div>
           <div class="form-group">
             <label>Phone: </label>

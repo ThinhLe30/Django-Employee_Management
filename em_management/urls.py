@@ -30,7 +30,6 @@ urlpatterns = [
     path('auth/', admin_site.urls),
     path('', lambda request: redirect('/home/'), name='index'),
 ]
-urlpatterns += static(settings.STATIC_URL, 
- document_root=settings.STATIC_ROOT)
+
 handler404="handle_error.views.handle_404"
 handler500="handle_error.views.handle_500"
