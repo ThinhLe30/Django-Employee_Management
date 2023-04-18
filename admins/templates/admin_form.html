@@ -1,0 +1,179 @@
+{% extends 'index.html' %} {% load static %} {% block content %}
+<div class="table-responsive">
+  <div class="table-wrapper">
+    <div class="tabel-title">
+      <p>{{title}}</p>
+      <i class="fa-solid fa-circle"></i>
+      <p class="text">Admin</p>
+    </div>
+    <form
+      name="admin_form"
+      class="form"
+      method="post"
+      action="/admins/save/"
+      style="max-width: 700px; margin: 3rem auto 0"
+      enctype="multipart/form-data"
+      onsubmit="return checkDuplicate(this);"
+    >
+      {% csrf_token %}
+      <input type="hidden" name="id" value="{{id}}" id="id" />
+      <label for="first_name" class="label-input">
+        <span class="input-span">Firstname</span>
+        <div class="input-container">
+          <i class="ph-envelope"></i>
+          <input
+            type="text"
+            name="first_name"
+            id="first_name"
+            class="input"
+            placeholder="Enter your firstname"
+            value="{{admin.first_name}}"
+            autofocus
+            required
+          />
+        </div>
+      </label>
+      <label for="last_name" class="label-input">
+        <span class="input-span">Lastname</span>
+        <div class="input-container">
+          <i class="ph-envelope"></i>
+          <input
+            type="text"
+            name="last_name"
+            id="last_name"
+            class="input"
+            placeholder="Enter your lastname"
+            value="{{admin.last_name}}"
+            autofocus
+            required
+          />
+        </div>
+      </label>
+      {% if title != 'Update' %}
+      <label for="username" class="label-input">
+        <span class="input-span">Username</span>
+        <div class="input-container">
+          <i class="ph-envelope"></i>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            class="input"
+            placeholder="Enter your username"
+            value="{{admin.username}}"
+            autofocus
+            required
+          />
+        </div>
+      </label>
+      {% endif %}
+      <label for="password" class="label-input">
+        <span class="input-span">Password</span>
+        <div class="input-container">
+          <i class="ph-envelope"></i>
+          <input
+            type="text"
+            name="password"
+            id="password"
+            class="input"
+            placeholder="Enter your password"
+            value="{{admin.password}}"
+            autofocus
+            required
+          />
+        </div>
+      </label>
+      <label for="phone" class="label-input">
+        <span class="input-span">Phone Number</span>
+        <div class="input-container">
+          <i class="ph-envelope"></i>
+          <input
+            type="text"
+            name="phone"
+            id="phone"
+            class="input"
+            placeholder="Enter your phone"
+            value="{{admin.phone}}"
+            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+            autofocus
+            required
+          />
+        </div>
+      </label>
+      <button
+        type="submit"
+        class="btn-submit"
+        style="margin-bottom: 16px; margin-top: 0 !important"
+      >
+        Submit
+      </button>
+    </form>
+  </div>
+</div>
+<div
+  class="modal fade"
+  id="messageModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Duplicated username or phone number
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Another admin is currently using the username or phone number you have
+          entered. Please choose another one!
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function checkDuplicate(form) {
+    var phone = $("#phone").val();
+    var id = $("#id").val();
+    var username = $("#username").val();
+    $.ajax({
+      method: "POST",
+      url: "http://127.0.0.1:8000/admins/checkDuplicate/",
+      data: JSON.stringify({
+        phone: phone,
+        id: id,
+        username: username,
+      }),
+      contentType: "application/json",
+      success: function (response) {
+        if (response == "Ok") {
+          form.submit();
+        } else {
+          $("#messageModal").modal("show");
+        }
+      },
+      error: function (xhr, status, error) {
+        alert(status);
+        alert(error);
+      },
+    });
+    return false;
+  }
+</script>
+{% endblock content %}

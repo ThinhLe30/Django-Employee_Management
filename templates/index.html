@@ -34,17 +34,21 @@
     <div class="container">
       <div class="side">
         <div class="title">
-            <img src="{% static 'image/logo/office.png' %}" alt="" />
-            <a href="{% url 'home:home' %}"><p>Management</p></a>
+          <img src="{% static 'image/logo/office.png' %}" alt="" />
+          <a href="{% url 'home:home' %}"><p>Management</p></a>
         </div>
         <ul class="nav">
           <li class="nav-list">
             <i class="nav-icon fa-solid fa-users"></i>
-            <p class="nav-text"><a href="{% url 'employees:list' %}">Employee</a></p>
+            <p class="nav-text">
+              <a href="{% url 'employees:list' %}">Employee</a>
+            </p>
           </li>
           <li class="nav-list">
             <i class="nav-icon fa-solid fa-building-user"></i>
-            <p class="nav-text"><a href="{% url 'departments:list' %}">Department</a></p>
+            <p class="nav-text">
+              <a href="{% url 'departments:list' %}">Department</a>
+            </p>
           </li>
           <li class="nav-list">
             <i class="nav-icon fa-solid fa-file-invoice-dollar"></i>
@@ -52,7 +56,7 @@
           </li>
           <li class="nav-list">
             <i class="nav-icon fa-solid fa-user"></i>
-            <p class="nav-text">Admin</p>
+            <p class="nav-text"><a href="{% url 'admins:list' %}">Admin</a></p>
           </li>
         </ul>
         <div class="logout">
