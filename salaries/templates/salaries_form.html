@@ -1,0 +1,82 @@
+{% extends 'index.html' %} {% load static %}  {% block content %}
+<div class="table-responsive">
+<div class="table-wrapper">
+    <div class="tabel-title">
+      <p>{{title}}</p>
+      <i class="fa-solid fa-circle"></i>
+      <p class="text">Level Salary</p>
+    </div>
+        <form name="level_salary_form" class="form"
+              method="post" action="/salaries/save/"
+              style="max-width: 700px; margin: 0 auto"
+              enctype="multipart/form-data"
+              onsubmit="return formSubmit(this);"
+        >
+            {% csrf_token %}
+            <input type="hidden" name ="id" value="{{id}}" id = "id">
+            <label for="basicSalary" class="label-input">
+                <span class="input-span">Basic Salary</span>
+                <div class="input-container">
+                    <i class="ph-envelope"></i>
+                    <input
+                            type="text"
+                            name="basicSalary"
+                            id="basicSalary"
+                            class="input"
+                            placeholder="Enter your Basic Salary"
+                            value="{{level_salary.basicSalary}}"
+                            onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                            autofocus
+                            required
+                    />
+                </div>
+            </label>
+            <label for="coefficientPay" class="label-input">
+                <span class="input-span">Coefficient Pay</span>
+                <div class="input-container">
+                    <i class="ph-envelope"></i>
+                    <input
+                            input type="number" min="0" max="5" step="0.1"
+                            name="coefficientPay"
+                            id="coefficientPay"
+                            class="input"
+                            placeholder="Enter your Coefficient Pay"
+                            value="{{level_salary.coefficientPay}}"
+                            onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                            autofocus
+                            required
+                    />
+                </div>
+            </label>
+            <label for="coefficientAllowance" class="label-input">
+                <span class="input-span">Coefficient Allowance</span>
+                <div class="input-container">
+                    <i class="ph-envelope"></i>
+                    <input
+
+                            input type="number" min="0" max="5" step="0.1"
+                            name="coefficientAllowance"
+                            id="coefficientAllowance"
+                            class="input"
+                            placeholder="Enter your Coefficient Allowance"
+                            value="{{level_salary.coefficientAllowance}}"
+                            onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                            autofocus
+                            required
+                    />
+                </div>
+            </label>
+           
+
+            <button type="submit" class="btn-submit" style="margin-bottom:16px; margin-top: 0!important; ">Submit</button>
+        </form>
+    </div>
+</div>
+
+</div>
+<script>
+    function formSubmit(form){
+        form.submit();    
+    }
+</script>
+{% endblock content %}
