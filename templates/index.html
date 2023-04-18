@@ -50,19 +50,23 @@
             <i class="nav-icon fa-solid fa-file-invoice-dollar"></i>
             <p class="nav-text">Salary Level</p>
           </li>
+          {% if user.is_authenticated %}
           <li class="nav-list">
             <i class="nav-icon fa-solid fa-user"></i>
             <p class="nav-text">Admin</p>
           </li>
+          {% endif %}
         </ul>
+        {% if user.is_authenticated %}
         <div class="logout">
           <div class="btn-logout">
-            <a href="#">
+            <a href="/em_admin/logout/">
               Log out
               <i class="fa-solid fa-right-from-bracket"></i>
             </a>
           </div>
         </div>
+        {% endif %}
       </div>
       {% block content %} {% endblock content %}
     </div>

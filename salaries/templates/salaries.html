@@ -21,6 +21,7 @@
         </form>
         <i class="search-icon fa-solid fa-magnifying-glass"></i>
       </div>
+      {% if user.is_authenticated %}
       <div class="add">
         <a href="{% url 'salaries:add' %}" class="btn" data-toggle="modal">
           <div class="tooltip">
@@ -29,6 +30,7 @@
           </div></a
         >
       </div>
+      {% endif %}
     </div>
   </div>
   {% if messages %}
@@ -71,6 +73,7 @@
               <p class="tooltiptext">Info detail</p>
             </div>
           </a>
+          {% if user.is_authenticated %}
           <a href="/salaries/edit/{{sal.id}}/" class="edit" data-toggle="modal">
             <div class="tooltip">
               <i class="edit-icon fa-solid fa-pen-to-square"></i>
@@ -83,6 +86,7 @@
               <p class="tooltiptext">Delete</p>
             </div>
           </a>
+          {% endif %}
         </td>
         {% endfor %}
       </tr>
