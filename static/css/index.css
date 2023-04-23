@@ -227,12 +227,8 @@ table.table tr td:first-child {
 table.table tr:hover td:first-child {
   border-left: solid 4px #0067c0;
 }
-<<<<<<< HEAD
 table.table tr:hover .td-mail,
 table.table tr:hover .td-username {
-=======
-table.table tr:hover .td-name {
->>>>>>> main
   color: #339af0;
 }
 table.table td a {
