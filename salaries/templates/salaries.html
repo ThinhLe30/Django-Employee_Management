@@ -21,7 +21,7 @@
         </form>
         <i class="search-icon fa-solid fa-magnifying-glass"></i>
       </div>
-      {% if user.is_authenticated %}
+      {% if user.is_superuser %}
       <div class="add">
         <a href="{% url 'salaries:add' %}" class="btn" data-toggle="modal">
           <div class="tooltip">
@@ -57,27 +57,11 @@
       {% for sal in level_salaries %}
       <tr>
         <td>{{forloop.counter}}</td>
-    
         <td>{{sal.basicSalary}}</td>
         <td>{{sal.coefficientPay}}</td>
         <td>{{sal.coefficientAllowance}}</td>
+        {% if user.is_superuser %}
         <td class="td-action">
-          <!-- <a
-            href="#"
-            id="detail-toggle-link"
-            onclick="return fetchLevel_SalaryDetail(`{{sal.id}}`);"
-            class="edit"
-          >
-            <div class="tooltip">
-              <i class="info-icon fa-solid fa-circle-info"></i>
-              <p class="tooltiptext">Info detail</p>
-            </div>
-<<<<<<< HEAD
-          </a>
-          {% if user.is_authenticated %}
-=======
-          </a> -->
->>>>>>> 70a037831d0011909c81485d5956bd2691210a81
           <a href="/salaries/edit/{{sal.id}}/" class="edit" data-toggle="modal">
             <div class="tooltip">
               <i class="edit-icon fa-solid fa-pen-to-square"></i>
@@ -90,8 +74,8 @@
               <p class="tooltiptext">Delete</p>
             </div>
           </a>
-          {% endif %}
         </td>
+        {% endif %}
         {% endfor %}
       </tr>
     </tbody>

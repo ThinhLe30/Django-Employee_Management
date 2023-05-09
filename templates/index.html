@@ -55,34 +55,30 @@
           </li>
           <li class="nav-list">
             <i class="nav-icon fa-solid fa-file-invoice-dollar"></i>
-            <p class="nav-text">Salary Level</p>
+            <p class="nav-text"><a href="{% url 'salaries:list' %}">Salary Level</a></p>
           </li>
-          {% if user.is_authenticated %}
+          {% if user.is_superuser %}
           <li class="nav-list">
             <i class="nav-icon fa-solid fa-user"></i>
             <p class="nav-text"><a href="{% url 'admins:list' %}">Admin</a></p>
           </li>
           {% endif %}
         </ul>
-        {% if user.is_authenticated %}
+        <!-- welcome message -->
+        <div class="welcome">
+          <div class="welcome-text">
+            <p>Welcome</p>
+            <p>{{ user.get_username }}</p>
+          </div>
+        </div>
         <div class="logout">
           <div class="btn-logout">
-            <a href="/auth/logout/">
+            <a href="/logout/">
               Log out
               <i class="fa-solid fa-right-from-bracket"></i>
             </a>
           </div>
         </div>
-        {% endif %} {% if not user.is_authenticated %}
-        <div class="logout">
-          <div class="btn-logout">
-            <a href="/auth/login/">
-              Log in
-              <i class="fa-solid fa-right-from-bracket"></i>
-            </a>
-          </div>
-        </div>
-        {% endif %}
       </div>
       {% block content %} {% endblock content %}
     </div>

@@ -26,6 +26,9 @@
     </header>
     <form name="login" class="form" action="{% url 'login' %}" method="post">
         {% csrf_token %}
+        {% if form.errors %}
+            <p style="color:#e63c3c; font-style: italic;">Your username or password is incorrect. Please try again.</p>
+        {% endif %}
         <label for="username" class="label-username">
             <span class="username-span">Username</span>
             <div class="input-username-container">
@@ -56,7 +59,6 @@
                 />
             </div>
         </label>
-        <a class="btn-log-in btn-continue-as-guess text-center" href="/home/">Continue as guest</a>
         <button type="submit" class="btn-log-in">Login</button>
     </form>
 </div>

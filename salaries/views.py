@@ -2,14 +2,14 @@ import math
 from django.shortcuts import render
 from django.http import JsonResponse
 from salaries.models import Level_Salary
-from departments.models import Department
-from django.core import serializers
 from django.db.models import Q
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
-import json
-# Create your views here.
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
+
+@login_required
 def showLevel_SalariesList(request):
     per_page = 7
     keyword = request.GET.get('keyword')
@@ -24,11 +24,9 @@ def showLevel_SalariesList(request):
     if not sortField:
         sortField = "basicSalary"
     level_salaries = Level_Salary.objects.all()
-    print(level_salaries)
 
     for level_salarie in level_salaries:
         level_salarie.basicSalary = str(int(level_salarie.basicSalary))
-    print(level_salaries)
     if keyword:
         # | Q(lastName=keyword) | %like Q(phone=keyword) | Q(email=keyword) | Q(birthday=keyword) | Q(address=keyword) | Q(department=keyword) | Q(salary=keyword)
          level_salaries =  level_salaries.filter(Q( basicSalary__icontains=keyword.split('.')[0]) | Q(coefficientPay__icontains=keyword) | Q(coefficientAllowance__icontains=keyword) )
@@ -59,6 +57,8 @@ def showLevel_SalariesList(request):
     }
     return render(request, "salaries.html", context)
 
+
+@login_required
 def getDetailOfLevel_Salary(request, id):
     level_salary = Level_Salary.objects.get(pk=id)
     json = {
@@ -67,6 +67,9 @@ def getDetailOfLevel_Salary(request, id):
         'coefficientAllowance' : level_salary.coefficientAllowance,
     }
     return JsonResponse({'data' : json}, safe=False)
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser, login_url='permission_error')
 def showLevel_SalaryForm(request,id =0):
     if id == 0:
         level_salary = Level_Salary()
@@ -81,6 +84,9 @@ def showLevel_SalaryForm(request,id =0):
             'title': title
         }
     return render(request, "salaries_form.html", context)
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser, login_url='permission_error')
 def saveLevel_Salary(request):
     if request.method == "POST":
         id = int(request.POST.get('id'))
@@ -92,18 +98,21 @@ def saveLevel_Salary(request):
         if id == 0:
             salary = Level_Salary(basicSalary=basicSalary, coefficientPay=coefficientPay, coefficientAllowance=coefficientAllowance)
             salary.save()
-            messages.success(request, 'The salary level was saved successfully.')
+            messages.success(request, 'Salary level saved successfully.')
         else:
             salary = Level_Salary.objects.get(pk=id)
             salary.basicSalary = basicSalary
             salary.coefficientPay = coefficientPay
             salary.coefficientAllowance = coefficientAllowance
             salary.save()
-            messages.success(request, 'The salary level was edited successfully.')
+            messages.success(request, 'Salary level edited successfully.')
         # return render(request, "checkform.html", context)
         return redirect("/salaries/list/?keyword="+ basicSalary.split('.')[0])
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser, login_url='permission_error')
 def deleteLevel_Salary(request, id):
     salary = Level_Salary.objects.get(pk=id)
     salary.delete()
-    messages.success(request, 'The salary level was deleted successfully.')
+    messages.success(request, 'Salary level deleted successfully.')
     return redirect('/salaries/list/')

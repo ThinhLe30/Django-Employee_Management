@@ -21,7 +21,7 @@
         </form>
         <i class="search-icon fa-solid fa-magnifying-glass"></i>
       </div>
-    {% if user.is_authenticated %}
+    {% if user.is_superuser %}
       <div class="add">
         <a href="{% url 'employees:add' %}" class="btn" data-toggle="modal">
           <div class="tooltip">
@@ -81,7 +81,7 @@
               <p class="tooltiptext">Info detail</p>
             </div>
           </a>
-        {% if user.is_authenticated %}
+          {% if user.is_superuser %}
           <a href="/employees/edit/{{emp.id}}/" class="edit" data-toggle="modal">
             <div class="tooltip">
               <i class="edit-icon fa-solid fa-pen-to-square"></i>

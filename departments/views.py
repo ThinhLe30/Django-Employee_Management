@@ -3,8 +3,10 @@ from departments.models import Department
 from django.db.models import Q
 from django.contrib import messages
 import math
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
 
-# Create your views here.
+@login_required
 def showDepartmentsList(request): 
     per_page = 7  
     keyword = request.GET.get('keyword', "")
@@ -45,6 +47,8 @@ def showDepartmentsList(request):
     }
     return render(request, "departments.html", context)
 
+@login_required
+@user_passes_test(lambda u: u.is_superuser, login_url='permission_error')
 def showDepartmentForm(request, id = 0):
     if id != 0:
         department = Department.objects.get(id=id)
@@ -59,7 +63,9 @@ def showDepartmentForm(request, id = 0):
             'id': id
         }
     return render(request, "department_form.html", context)
-    
+
+@login_required    
+@user_passes_test(lambda u: u.is_superuser, login_url='permission_error')
 def saveDepartment(request):
     id = int(request.POST.get('id', 0))
     name = request.POST.get('name', "")
@@ -76,6 +82,8 @@ def saveDepartment(request):
     department.save()
     return redirect("/departments/list/?keyword="+name)
 
+@login_required
+@user_passes_test(lambda u: u.is_superuser, login_url='permission_error')
 def deleteDepartment(request, id):
     department = Department.objects.get(id=id)
     department.delete()

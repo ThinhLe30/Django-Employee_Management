@@ -21,7 +21,7 @@
         </form>
         <i class="search-icon fa-solid fa-magnifying-glass"></i>
       </div>
-      {% if user.is_authenticated %}
+      {% if user.is_superuser %}
       <div class="add">
         <a href="/departments/add/" class="btn">
           <div class="tooltip">
@@ -82,7 +82,7 @@
         <td>{{ department.phoneNumber }}</td>
         <td class="td-desc">{{ department.description }}</td>
         <td class="td-action">
-          {% if user.is_authenticated %}
+          {% if user.is_superuser %}
           <a href="/departments/edit/{{department.id}}/" class="edit">
             <div class="tooltip">
               <i class="edit-icon fa-solid fa-pen-to-square"></i>
