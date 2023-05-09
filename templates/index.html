@@ -5,7 +5,12 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
+    <title>Employee Management</title>
+    <link
+      rel="shortcut icon"
+      href="/static/image/logo/office.png"
+      type="image/x-icon"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -55,7 +60,9 @@
           </li>
           <li class="nav-list">
             <i class="nav-icon fa-solid fa-file-invoice-dollar"></i>
-            <p class="nav-text"><a href="{% url 'salaries:list' %}">Salary Level</a></p>
+            <p class="nav-text">
+              <a href="{% url 'salaries:list' %}">Salary Level</a>
+            </p>
           </li>
           {% if user.is_superuser %}
           <li class="nav-list">
@@ -64,13 +71,6 @@
           </li>
           {% endif %}
         </ul>
-        <!-- welcome message -->
-        <div class="welcome">
-          <div class="welcome-text">
-            <p>Welcome</p>
-            <p>{{ user.get_username }}</p>
-          </div>
-        </div>
         <div class="logout">
           <div class="btn-logout">
             <a href="/logout/">

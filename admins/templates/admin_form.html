@@ -1,10 +1,20 @@
 {% extends 'index.html' %} {% load static %} {% block content %}
 <div class="table-responsive">
   <div class="table-wrapper">
-    <div class="tabel-title">
-      <p>{{title}}</p>
-      <i class="fa-solid fa-circle"></i>
-      <p class="text">Admin</p>
+    <div class="table-header">
+      <div class="table-title">
+        <p>Manage</p>
+        <i class="fa-solid fa-circle"></i>
+        <a
+          href="{% url 'admins:list' %}"
+          style="text-decoration: none !important"
+          ><p class="text">Admin</p></a
+        >
+      </div>
+      <div class="username">
+        <p>{{ user.get_username }}</p>
+        <i class="fa-solid fa-circle-user"></i>
+      </div>
     </div>
     <form
       name="admin_form"
@@ -16,12 +26,14 @@
       onsubmit="return checkDuplicate(this);"
     >
       {% csrf_token %}
-      <input type="hidden" name="id" value="{{id}}" id="id" />
-      <select id="employee_id" name="employee_id">
-        {% for employee in employees %}
-        <option value="{{employee.id}}" {% if admin.employee.id == employee.id%}selected{% endif %}>{{employee.firstName}} {{employee.lastName}} - {{employee.phone}}</option>
-        {% endfor %}
-      </select>
+      <div class="input-container">
+        <input class="input" type="hidden" name="id" value="{{id}}" id="id" />
+        <select class="input" id="employee_id" name="employee_id">
+          {% for employee in employees %}
+          <option value="{{employee.id}}" {% if admin.employee.id == employee.id%}selected{% endif %}>{{employee.firstName}} {{employee.lastName}} - {{employee.phone}}</option>
+          {% endfor %}
+        </select>
+      </div>
       {% if title != 'Update' %}
       <label for="username" class="label-input">
         <span class="input-span">Username</span>
@@ -63,7 +75,7 @@
         <span class="input-span">Type</span>
         <div class="input-container">
           <i class="ph-envelope"></i>
-          <select id="is_staff" name="is_staff">
+          <select class="input" id="is_staff" name="is_staff">
             <option value="0" {% if admin.is_staff == 0%}selected{% endif %}>Manager</option>
             <option value="1" {% if admin.is_staff == 1%}selected{% endif %}>Employee</option>
           </select>

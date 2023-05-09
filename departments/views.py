@@ -6,9 +6,10 @@ import math
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 
+
 @login_required
-def showDepartmentsList(request): 
-    per_page = 7  
+def showDepartmentsList(request):
+    per_page = 6
     keyword = request.GET.get('keyword', "")
     sort = request.GET.get('sort', "asc")
     page_num = int(request.GET.get('page', 1))
@@ -17,7 +18,8 @@ def showDepartmentsList(request):
     departments = Department.objects.all()
 
     if keyword:
-        departments = departments.filter(Q(name__icontains=keyword) | Q(description__icontains=keyword) | Q(address__icontains=keyword) | Q(phoneNumber__icontains=keyword))
+        departments = departments.filter(Q(name__icontains=keyword) | Q(description__icontains=keyword) | Q(
+            address__icontains=keyword) | Q(phoneNumber__icontains=keyword))
     if sort == "asc":
         departments = departments.order_by(sort_field)
     else:
@@ -28,7 +30,7 @@ def showDepartmentsList(request):
     start = (page_num - 1) * per_page
     end = page_num * per_page
 
-    if end > total : 
+    if end > total:
         end = total
 
     departments = departments[start:end]
@@ -41,15 +43,16 @@ def showDepartmentsList(request):
         'reverse_sort_field': reverse_sort_field,
         'range': range(1, total_page+1),
         'page_num': page_num,
-        'keyword' : keyword,
-        'sort' : sort,
+        'keyword': keyword,
+        'sort': sort,
         'sort_field': sort_field
     }
     return render(request, "departments.html", context)
 
+
 @login_required
 @user_passes_test(lambda u: u.is_superuser, login_url='permission_error')
-def showDepartmentForm(request, id = 0):
+def showDepartmentForm(request, id=0):
     if id != 0:
         department = Department.objects.get(id=id)
         title = "Update"
@@ -58,13 +61,14 @@ def showDepartmentForm(request, id = 0):
         title = "Add"
 
     context = {
-            'department': department,
-            'title': title,
-            'id': id
-        }
+        'department': department,
+        'title': title,
+        'id': id
+    }
     return render(request, "department_form.html", context)
 
-@login_required    
+
+@login_required
 @user_passes_test(lambda u: u.is_superuser, login_url='permission_error')
 def saveDepartment(request):
     id = int(request.POST.get('id', 0))
@@ -73,14 +77,17 @@ def saveDepartment(request):
     address = request.POST.get('address', "")
     phoneNumber = request.POST.get('phoneNumber', "")
     if id == 0:
-        department = Department(name=name, description=description, address=address, phoneNumber=phoneNumber)
+        department = Department(
+            name=name, description=description, address=address, phoneNumber=phoneNumber)
         messages.success(request, "Department added successfully.")
     else:
-        department = Department(id=id, name=name, description=description, address=address, phoneNumber=phoneNumber)
+        department = Department(
+            id=id, name=name, description=description, address=address, phoneNumber=phoneNumber)
         messages.success(request, "Department updated successfully.")
 
     department.save()
     return redirect("/departments/list/?keyword="+name)
+
 
 @login_required
 @user_passes_test(lambda u: u.is_superuser, login_url='permission_error')

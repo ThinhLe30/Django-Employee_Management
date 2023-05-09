@@ -1,10 +1,21 @@
 {% extends 'index.html' %} {% load static %}  {% block content %}
 <div class="table-responsive">
 <div class="table-wrapper">
-    <div class="tabel-title">
-      <p>{{title}}</p>
-      <i class="fa-solid fa-circle"></i>
-      <p class="text">Level Salary</p>
+    <div class="table-header">
+        <div class="table-title">
+          <p>Manage</p>
+          <i class="fa-solid fa-circle"></i>
+          <a
+            href="{% url 'salaries:list' %}"
+            style="text-decoration: none !important"
+            ><p class="text">Salary Level</p></a
+          >
+        </div>
+        <div class="username">
+          <p>{{ user.get_username }}</p>
+          <i class="fa-solid fa-circle-user"></i>
+        </div>
+      </div>
     </div>
         <form name="level_salary_form" class="form"
               method="post" action="/salaries/save/"
