@@ -1,6 +1,7 @@
-from django.urls import path, include
+from django.urls import path
 from . import views
-app_name = 'employees'
+app_name = 'salaries'
+
 urlpatterns = [
     path('list/', views.showLevel_SalariesList, name='list'),
     path('detail/<int:id>/', views.getDetailOfLevel_Salary, name='detail'),

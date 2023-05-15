@@ -6,7 +6,6 @@ import math
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 
-
 @login_required
 def showDepartmentsList(request):
     per_page = 6
@@ -49,7 +48,6 @@ def showDepartmentsList(request):
     }
     return render(request, "departments.html", context)
 
-
 @login_required
 @user_passes_test(lambda u: u.is_superuser, login_url='permission_error')
 def showDepartmentForm(request, id=0):
@@ -66,7 +64,6 @@ def showDepartmentForm(request, id=0):
         'id': id
     }
     return render(request, "department_form.html", context)
-
 
 @login_required
 @user_passes_test(lambda u: u.is_superuser, login_url='permission_error')
@@ -87,7 +84,6 @@ def saveDepartment(request):
 
     department.save()
     return redirect("/departments/list/?keyword="+name)
-
 
 @login_required
 @user_passes_test(lambda u: u.is_superuser, login_url='permission_error')

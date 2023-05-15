@@ -1,5 +1,5 @@
 .homepage {
-  margin: 20px auto;
+  margin: 20px 5px;
   min-width: 1250px;
 }
 .homepage-title {
@@ -20,13 +20,14 @@
   font-size: 18px;
 }
 .homepage-members {
-  margin: 15px 0;
-  padding: 0 40px;
+  margin: 5px 0;
+  padding: 0 5px;
   display: flex;
   justify-content: space-between;
 }
 .homepage-card {
-  padding: 25px 30px;
+  margin: 0 5px;
+  padding: 10px 10px;
   width: 320px;
   height: fit-content;
   background-color: rgba(231, 245, 255, 0.6);

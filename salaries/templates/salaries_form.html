@@ -11,10 +11,13 @@
             ><p class="text">Salary Level</p></a
           >
         </div>
-        <div class="username">
-          <p>{{ user.get_username }}</p>
-          <i class="fa-solid fa-circle-user"></i>
-        </div>
+        <div class="username_container">
+            <div class="username">
+              <p>{{ user.get_full_name }}</p><br>
+              <i class="fa-solid fa-circle-user"></i>
+            </div>
+            <p>{{ user.get_type }}</p>
+          </div>
       </div>
     </div>
         <form name="level_salary_form" class="form"

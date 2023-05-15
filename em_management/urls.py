@@ -30,7 +30,6 @@ urlpatterns = [
     path('admins/', include('admins.urls', namespace="admins")),
     path('salaries/', include('salaries.urls', namespace="salaries")),
     path('', include("django.contrib.auth.urls")), 
-    # path('auth/', admin_site.urls),
     path('permission_error/', views.permission_error, name='permission_error'),
     path('', lambda request: redirect('/login/'), name='index'),
 ]

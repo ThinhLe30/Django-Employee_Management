@@ -1,6 +1,7 @@
-from django.urls import path, include
+from django.urls import path
 from . import views
 app_name = 'departments'
+
 urlpatterns = [
     path('list/', views.showDepartmentsList, name='list'),
     path('add/', views.showDepartmentForm, name='add'),

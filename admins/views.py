@@ -87,7 +87,7 @@ def showAdminForm(request, id=0):
         admin = AdminApp.objects.get(pk=id)
         title = 'Update'
     
-    employees = Employee.objects.all()
+    employees = Employee.objects.all().order_by('firstName')
 
     context = {
         'admin': admin,

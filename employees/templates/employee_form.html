@@ -11,10 +11,13 @@
             ><p class="text">Employee</p></a
           >
         </div>
-        <div class="username">
-          <p>{{ user.get_username }}</p>
-          <i class="fa-solid fa-circle-user"></i>
-        </div>
+        <div class="username_container">
+            <div class="username">
+              <p>{{ user.get_full_name }}</p><br>
+              <i class="fa-solid fa-circle-user"></i>
+            </div>
+            <p>{{ user.get_type }}</p>
+          </div>
       </div>
         <form name="employee_form" class="form"
               method="post" action="/employees/save/"

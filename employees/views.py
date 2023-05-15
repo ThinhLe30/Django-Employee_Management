@@ -83,8 +83,8 @@ def showEmployeeForm(request, id=0):
     else:
         employee = Employee.objects.get(pk=id)
         title = 'Update'
-    departments = Department.objects.all()
-    salaries = Level_Salary.objects.all()
+    departments = Department.objects.all().order_by('name')
+    salaries = Level_Salary.objects.all().order_by('basicSalary')
     context = {
         'employee': employee,
         'departments': departments,
@@ -134,7 +134,6 @@ def saveEmployee(request):
             employee.image = image_file.name if image_file else employee.image
             employee.save()
             messages.success(request, 'Employee edited successfully.')
-        # return render(request, "checkform.html", context)
         return redirect("/employees/list/?keyword="+email)
 
 @login_required
