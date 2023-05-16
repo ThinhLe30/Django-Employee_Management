@@ -107,6 +107,26 @@ body {
 .side .btn-logout i {
   margin-left: 8px;
 }
+.username {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.username:active {
+  scale: 110%;
+}
+.username p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+.username i {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
 .table-responsive {
   margin: 0 auto;
   overflow: visible;
@@ -138,23 +158,28 @@ body {
 .table-wrapper .add.btn:hover {
   background-color: #4dabf7;
 }
-.tabel-title {
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.table-title {
   padding: 30px 0 20px;
   display: flex;
   align-items: center;
   box-shadow: 0 4px 5px -2px rgb(241, 243, 245, 0.5);
 }
-.tabel-title p {
+.table-title p {
   margin: 0;
   font-size: 16px;
   font-weight: 600;
   line-height: 1;
 }
-.tabel-title i {
+.table-title i {
   font-size: 5px;
   margin: 0 10px;
 }
-.tabel-title .text {
+.table-title .text {
   font-size: 24px;
   font-weight: 600;
   color: #228be6;
@@ -227,12 +252,8 @@ table.table tr td:first-child {
 table.table tr:hover td:first-child {
   border-left: solid 4px #0067c0;
 }
-<<<<<<< HEAD
 table.table tr:hover .td-mail,
 table.table tr:hover .td-username {
-=======
-table.table tr:hover .td-name {
->>>>>>> main
   color: #339af0;
 }
 table.table td a {
@@ -269,6 +290,8 @@ table.table .avatar {
   border-radius: 50%;
   vertical-align: middle;
   margin-right: 10px;
+  width: 40px ;
+  height: 40px;
 }
 table.table .td-name {
   font-weight: bold;
@@ -434,9 +457,18 @@ table.table .tr-depart .td-action {
   background: #ddd;
 }
 /* Modal styles */
-.modal .modal-dialog {
-  max-width: 400px;
+.modal .modal {
 }
+
+.modal .modal-dialog {
+  margin: auto;
+  height: 100vh;
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+}
+
 .modal .modal-header,
 .modal .modal-body,
 .modal .modal-footer {
@@ -444,6 +476,7 @@ table.table .tr-depart .td-action {
 }
 .modal .modal-content {
   border-radius: 3px;
+  width: 400px !important;
 }
 .modal .modal-footer {
   background: #ecf0f1;

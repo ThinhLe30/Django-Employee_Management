@@ -1,12 +1,23 @@
 {% extends 'index.html' %} {% load static %} {% block content %}
 <div class="table-responsive">
   <div class="table-wrapper">
-    <div class="tabel-title">
-      <p>Manage</p>
-      <i class="fa-solid fa-circle"></i>
-      <a href="{% url 'admins:list' %}" style="text-decoration: none !important"
-        ><p class="text">Admin</p></a
-      >
+    <div class="table-header">
+      <div class="table-title">
+        <p>Manage</p>
+        <i class="fa-solid fa-circle"></i>
+        <a
+          href="{% url 'admins:list' %}"
+          style="text-decoration: none !important"
+          ><p class="text">Admin</p></a
+        >
+      </div>
+      <div class="username_container">
+        <div class="username">
+          <p>{{ user.get_full_name }}</p><br>
+          <i class="fa-solid fa-circle-user"></i>
+        </div>
+        <p>{{ user.get_type }}</p>
+      </div>
     </div>
     <div class="table-control">
       <div class="search">
@@ -20,9 +31,10 @@
             autocomplete="off"
             value="{{keyword}}"
           />
+          <i class="search-icon fa-solid fa-magnifying-glass"></i>
         </form>
-        <i class="search-icon fa-solid fa-magnifying-glass"></i>
       </div>
+      {% if user.is_superuser %}
       <div class="add">
         <a href="{% url 'admins:add' %}" class="btn" data-toggle="modal">
           <div class="tooltip">
@@ -31,24 +43,16 @@
           </div></a
         >
       </div>
+      {% endif %}
     </div>
   </div>
-  {% if messages %}
-  <ul class="messages">
-    {% for message in messages %}
-    <div class="alert alert-success text-center" role="alert" id="alert">
-      <span id="span-message">{{ message }}</span>
-    </div>
-    {% endfor %}
-  </ul>
-  {% endif %}
   <table class="table table-striped table-hover table-borderless">
     <thead>
       <tr>
         <th>#</th>
         <th>
           <a
-            href="/admins/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=last_name"
+            href="/admins/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=lastName"
             >Name <i class="fa fa-sort" aria-hidden="true"></i
           ></a>
         </th>
@@ -60,8 +64,8 @@
         </th>
         <th>
           <a
-            href="/admins/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=password"
-            >Password <i class="fa fa-sort" aria-hidden="true"></i
+            href="/admins/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=gender"
+            >Gender <i class="fa fa-sort" aria-hidden="true"></i
           ></a>
         </th>
         <th>
@@ -77,10 +81,12 @@
       {% for ad in admins %}
       <tr>
         <td>{{forloop.counter}}</td>
-        <td class="td-name">{{ad.first_name}} {{ad.last_name}}</td>
+        <td class="td-name">
+          {{ad.employee.firstName}} {{ad.employee.lastName}}
+        </td>
         <td class="td-username">{{ad.username}}</td>
-        <td>{{ad.password}}</td>
-        <td>{{ad.phone}}</td>
+        <td>{% if ad.employee.gender %} Male {%else %} Female {% endif %}</td>
+        <td>{{ad.employee.phone}}</td>
         <td class="td-action">
           <a
             href="#"
@@ -93,6 +99,7 @@
               <p class="tooltiptext">Info detail</p>
             </div>
           </a>
+          {% if user.is_superuser %}
           <a href="/admins/edit/{{ad.id}}/" class="edit" data-toggle="modal">
             <div class="tooltip">
               <i class="edit-icon fa-solid fa-pen-to-square"></i>
@@ -110,11 +117,19 @@
             </div>
           </a>
         </td>
-        {% endfor %}
+        {% endif %} {% endfor %}
       </tr>
     </tbody>
   </table>
-  {% if not admins %}
+  {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+    <div class="alert alert-success top-right" role="alert" id="alert">
+      <span id="span-message">{{ message }}</span>
+    </div>
+    {% endfor %}
+  </ul>
+  {% endif %} {% if not admins %}
   <h3><p class="text text-center">No matches found.</p></h3>
   {% endif %} {% if totalPage > 1%}
   <ul class="pagination">
@@ -172,12 +187,20 @@
             <span id="username"></span>
           </div>
           <div class="form-group">
-            <label>Password: </label>
-            <span id="password"></span>
+            <label>Email: </label>
+            <span id="email"></span>
           </div>
           <div class="form-group">
             <label>Phone: </label>
             <span id="phone"></span>
+          </div>
+          <div class="form-group">
+            <label>Address: </label>
+            <span id="address"></span>
+          </div>
+          <div class="form-group">
+            <label>Account type: </label>
+            <span id="type"></span>
           </div>
         </div>
         <div class="modal-footer">
@@ -208,7 +231,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <p>Are you sure you want to delete this admin?</p>
+          <p>Are you sure you want to delete this admin account?</p>
           <p class="text-warning">
             <small>This action cannot be undone.</small>
           </p>
@@ -227,6 +250,9 @@
   </div>
 </div>
 <script>
+  $(".search-icon").click(function () {
+    $(this).closest("form").submit();
+  });
   function fetchAdminDetail(id) {
     var csrf = $("input[name=csrfmiddlewaretoken]").val();
     $.ajax({
@@ -235,8 +261,10 @@
       success: function (response) {
         $(`#name`).html(response.data.name);
         $(`#username`).html(response.data.username);
-        $(`#password`).html(response.data.password);
+        $(`#email`).html(response.data.email);
         $(`#phone`).html(response.data.phone);
+        $(`#address`).html(response.data.address);
+        $(`#type`).html(response.data.type);
         $("#infoAdminModal").modal();
       },
       error: function (error) {

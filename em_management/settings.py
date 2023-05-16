@@ -28,6 +28,10 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1','localhost']
 
+# DEBUG = True
+
+# ALLOWED_HOSTS = []
+
 
 # Application definition
 
@@ -88,7 +92,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'django_em_management',
         'USER': 'root',
-        'PASSWORD': 'nvvuong47',
+        'PASSWORD': 'Pknpknkn270!',
         'HOST': 'localhost',
         'PORT': '3306',
     }
@@ -128,7 +132,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-
+# STATIC_ROOT = 'static/'
 STATIC_URL = 'static/'
 STATICFILES_DIRS = (
     BASE_DIR/'static',
@@ -140,3 +144,7 @@ STATICFILES_DIRS = (
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'admins.AdminApp'
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = '/home/'
+LOGOUT_REDIRECT_URL = 'login'

@@ -13,22 +13,26 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.conf import settings
-from django.contrib import admin
 from django.shortcuts import redirect
 from django.urls import include, path
-from django.conf.urls.static import static
+from admins.admin import admin_site
+from . import views
+from django.contrib.auth.views import (LoginView, LogoutView)
+
 
 urlpatterns = [
-    path('', lambda request: redirect('home:home'), name='index'),
-    path('admin/', admin.site.urls),
+    path('login/', LoginView.as_view(
+        template_name='login.html',redirect_authenticated_user=True),name='login'),
+    path('logout/',LogoutView.as_view(next_page='/login/'),name="logout"),
     path('home/', include('home.urls', namespace="home")),
     path('employees/', include('employees.urls', namespace="employees")),
     path('departments/', include('departments.urls', namespace="departments")),
-    # path('salaries/', include('salaries.urls', namespace="salaries")),
     path('admins/', include('admins.urls', namespace="admins")),
     path('salaries/', include('salaries.urls', namespace="salaries")),
-    # path('admins/', include('admin.urls', namespace="admin"))
+    path('', include("django.contrib.auth.urls")), 
+    path('permission_error/', views.permission_error, name='permission_error'),
+    path('', lambda request: redirect('/login/'), name='index'),
 ]
+
 handler404="handle_error.views.handle_404"
 handler500="handle_error.views.handle_500"

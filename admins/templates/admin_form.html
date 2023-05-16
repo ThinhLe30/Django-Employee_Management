@@ -1,10 +1,23 @@
 {% extends 'index.html' %} {% load static %} {% block content %}
 <div class="table-responsive">
   <div class="table-wrapper">
-    <div class="tabel-title">
-      <p>{{title}}</p>
-      <i class="fa-solid fa-circle"></i>
-      <p class="text">Admin</p>
+    <div class="table-header">
+      <div class="table-title">
+        <p>Manage</p>
+        <i class="fa-solid fa-circle"></i>
+        <a
+          href="{% url 'admins:list' %}"
+          style="text-decoration: none !important"
+          ><p class="text">Admin</p></a
+        >
+      </div>
+      <div class="username_container">
+        <div class="username">
+          <p>{{ user.get_full_name }}</p><br>
+          <i class="fa-solid fa-circle-user"></i>
+        </div>
+        <p>{{ user.get_type }}</p>
+      </div>
     </div>
     <form
       name="admin_form"
@@ -16,39 +29,14 @@
       onsubmit="return checkDuplicate(this);"
     >
       {% csrf_token %}
-      <input type="hidden" name="id" value="{{id}}" id="id" />
-      <label for="first_name" class="label-input">
-        <span class="input-span">Firstname</span>
-        <div class="input-container">
-          <i class="ph-envelope"></i>
-          <input
-            type="text"
-            name="first_name"
-            id="first_name"
-            class="input"
-            placeholder="Enter your firstname"
-            value="{{admin.first_name}}"
-            autofocus
-            required
-          />
-        </div>
-      </label>
-      <label for="last_name" class="label-input">
-        <span class="input-span">Lastname</span>
-        <div class="input-container">
-          <i class="ph-envelope"></i>
-          <input
-            type="text"
-            name="last_name"
-            id="last_name"
-            class="input"
-            placeholder="Enter your lastname"
-            value="{{admin.last_name}}"
-            autofocus
-            required
-          />
-        </div>
-      </label>
+      <div class="input-container">
+        <input class="input" type="hidden" name="id" value="{{id}}" id="id" />
+        <select class="input" id="employee_id" name="employee_id">
+          {% for employee in employees %}
+          <option value="{{employee.id}}" {% if admin.employee.id == employee.id%}selected{% endif %}>{{employee.firstName}} {{employee.lastName}} - {{employee.phone}}</option>
+          {% endfor %}
+        </select>
+      </div>
       {% if title != 'Update' %}
       <label for="username" class="label-input">
         <span class="input-span">Username</span>
@@ -68,36 +56,32 @@
       </label>
       {% endif %}
       <label for="password" class="label-input">
+        {% if title == 'Update' %}
+        <span style="color:#228BE6; font-style: italic; font-weight: 200;">Leave password blank if you don't want to update password</span>
+        {% endif %}
         <span class="input-span">Password</span>
         <div class="input-container">
           <i class="ph-envelope"></i>
           <input
-            type="text"
+            type="password"
             name="password"
             id="password"
             class="input"
             placeholder="Enter your password"
-            value="{{admin.password}}"
+            value=""
             autofocus
-            required
+            {% if title != 'Update' %}required{% endif %}
           />
         </div>
       </label>
-      <label for="phone" class="label-input">
-        <span class="input-span">Phone Number</span>
+      <label for="is_staff" class="label-input">
+        <span class="input-span">Type</span>
         <div class="input-container">
           <i class="ph-envelope"></i>
-          <input
-            type="text"
-            name="phone"
-            id="phone"
-            class="input"
-            placeholder="Enter your phone"
-            value="{{admin.phone}}"
-            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-            autofocus
-            required
-          />
+          <select class="input" id="is_staff" name="is_staff">
+            <option value="0" {% if admin.is_staff == 0%}selected{% endif %}>Manager</option>
+            <option value="1" {% if admin.is_staff == 1%}selected{% endif %}>Employee</option>
+          </select>
         </div>
       </label>
       <button
@@ -122,7 +106,7 @@
     <div class="modal-content">
       <div class="modal-header bg-primary">
         <h5 class="modal-title" id="exampleModalLabel">
-          Duplicated username or phone number
+          Duplicate information
         </h5>
         <button
           type="button"
@@ -135,8 +119,7 @@
       </div>
       <div class="modal-body">
         <p>
-          Another admin is currently using the username or phone number you have
-          entered. Please choose another one!
+          Another admin is currently using the username or the employee already has an admin account!
         </p>
       </div>
       <div class="modal-footer">
@@ -149,14 +132,14 @@
 </div>
 <script>
   function checkDuplicate(form) {
-    var phone = $("#phone").val();
+    var employee_id = $("#employee_id").val();
     var id = $("#id").val();
     var username = $("#username").val();
     $.ajax({
       method: "POST",
       url: "http://127.0.0.1:8000/admins/checkDuplicate/",
       data: JSON.stringify({
-        phone: phone,
+        employee_id: employee_id,
         id: id,
         username: username,
       }),

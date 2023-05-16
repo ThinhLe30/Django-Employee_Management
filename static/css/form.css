@@ -14,7 +14,7 @@ button {
 
 .form {
   display: flex;
-  /* flex-direction: column; */
+  flex-direction: column !important;
   align-items: stretch;
   width: 60%;
   max-width: 400px;
@@ -100,8 +100,7 @@ button {
   width: 80px;
   height: 80px;
 }
-.avatar-form-container {
-}
+
 .radio-input {
   margin: 0 100px 0 10px !important;
 }

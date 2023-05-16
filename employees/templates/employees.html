@@ -1,10 +1,23 @@
 {% extends 'index.html' %} {% load static %} {% block content %}
 <div class="table-responsive">
   <div class="table-wrapper">
-    <div class="tabel-title">
-      <p>Manage</p>
-      <i class="fa-solid fa-circle"></i>
-      <a href="{% url 'employees:list' %}" style="text-decoration: none !important;"><p class="text">Employee</p></a>
+    <div class="table-header">
+      <div class="table-title">
+        <p>Manage</p>
+        <i class="fa-solid fa-circle"></i>
+        <a
+          href="{% url 'employees:list' %}"
+          style="text-decoration: none !important"
+          ><p class="text">Employee</p></a
+        >
+      </div>
+      <div class="username_container">
+        <div class="username">
+          <p>{{ user.get_full_name }}</p><br>
+          <i class="fa-solid fa-circle-user"></i>
+        </div>
+        <p>{{ user.get_type }}</p>
+      </div>
     </div>
     <div class="table-control">
       <div class="search">
@@ -18,9 +31,10 @@
             autocomplete="off"
             value="{{keyword}}"
           />
+          <i class="search-icon fa-solid fa-magnifying-glass"></i>
         </form>
-        <i class="search-icon fa-solid fa-magnifying-glass"></i>
       </div>
+      {% if user.is_superuser %}
       <div class="add">
         <a href="{% url 'employees:add' %}" class="btn" data-toggle="modal">
           <div class="tooltip">
@@ -29,26 +43,43 @@
           </div></a
         >
       </div>
+      {% endif %}
     </div>
   </div>
-  {% if messages %}
-      <ul class="messages">
-          {% for message in messages %}
-          <div class="alert alert-success text-center" role="alert" id ="alert">
-            <span id ="span-message">{{ message }}</span>
-          </div>
-          {% endfor %}
-      </ul>
-  {% endif %}
   <table class="table table-striped table-hover table-borderless">
     <thead>
       <tr>
         <th>#</th>
-        <th><a href="/employees/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=lastName">Name <i class="fa fa-sort" aria-hidden="true"></i></a></th>
-        <th><a href="/employees/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=email">Email <i class="fa fa-sort" aria-hidden="true"></i></a></th>
-        <th><a href="/employees/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=phone">Phone <i class="fa fa-sort" aria-hidden="true"></i></a></th>
-        <th><a href="/employees/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=address">Address <i class="fa fa-sort" aria-hidden="true"></i></a></th>
-        <th><a href="/employees/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=department">Department <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+        <th>
+          <a
+            href="/employees/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=lastName"
+            >Name <i class="fa fa-sort" aria-hidden="true"></i
+          ></a>
+        </th>
+        <th>
+          <a
+            href="/employees/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=email"
+            >Email <i class="fa fa-sort" aria-hidden="true"></i
+          ></a>
+        </th>
+        <th>
+          <a
+            href="/employees/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=phone"
+            >Phone <i class="fa fa-sort" aria-hidden="true"></i
+          ></a>
+        </th>
+        <th>
+          <a
+            href="/employees/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=address"
+            >Address <i class="fa fa-sort" aria-hidden="true"></i
+          ></a>
+        </th>
+        <th>
+          <a
+            href="/employees/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=department"
+            >Department <i class="fa fa-sort" aria-hidden="true"></i
+          ></a>
+        </th>
         <th></th>
       </tr>
     </thead>
@@ -56,13 +87,14 @@
       {% for emp in employees %}
       <tr>
         <td>{{forloop.counter}}</td>
-        <td class= "td-name">
+        <td class="td-name">
           <img
-                        src="{% static 'image/avatar/' %}{{ emp.image }}"
-                        class="avatar"
-                        alt="Avatar"
-                />
-          {{emp.firstName}} {{emp.lastName}}</td>
+            src="{% static 'image/avatar/' %}{{ emp.image }}"
+            class="avatar"
+            alt="Avatar"
+          />
+          {{emp.firstName}} {{emp.lastName}}
+        </td>
         <td class="td-mail">{{emp.email}}</td>
         <td>{{emp.phone}}</td>
         <td>{{emp.address}}</td>
@@ -79,48 +111,72 @@
               <p class="tooltiptext">Info detail</p>
             </div>
           </a>
-          <a href="/employees/edit/{{emp.id}}/" class="edit" data-toggle="modal">
+          {% if user.is_superuser %}
+          <a
+            href="/employees/edit/{{emp.id}}/"
+            class="edit"
+            data-toggle="modal"
+          >
             <div class="tooltip">
               <i class="edit-icon fa-solid fa-pen-to-square"></i>
               <p class="tooltiptext">Edit</p>
             </div></a
           >
-          <a href="/employees/delete/{{emp.id}}/" class="delete link-delete" data-toggle="modal">
+          <a
+            href="/employees/delete/{{emp.id}}/"
+            class="delete link-delete"
+            data-toggle="modal"
+          >
             <div class="tooltip">
               <i class="delete-icon fa-solid fa-trash"></i>
               <p class="tooltiptext">Delete</p>
             </div>
           </a>
+          {% endif %}
         </td>
         {% endfor %}
       </tr>
     </tbody>
   </table>
-  {% if not employees %}
+  {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+    <div class="alert alert-success text-center" role="alert" id="alert">
+      <span id="span-message">{{ message }}</span>
+    </div>
+    {% endfor %}
+  </ul>
+  {% endif %} {% if not employees %}
   <h3><p class="text text-center">No matches found.</p></h3>
-  {% endif %}
-  {% if  totalPage > 1%}
+  {% endif %} {% if totalPage > 1%}
   <ul class="pagination">
     <li class="page-item">
-        <a class="page-control link-back"
-        href="/employees/list/?{% if pageNum == 1 %}page={{ pageNum}}{% else %}page={{pageNum|add:-1 }}{% endif %}&keyword={{keyword}}&sort={{sort}}&sortField={{sortField}}">
-            <i class="fa-solid fa-arrow-left-long"></i
-            ></a>
+      <a
+        class="page-control link-back"
+        href="/employees/list/?{% if pageNum == 1 %}page={{ pageNum}}{% else %}page={{pageNum|add:-1 }}{% endif %}&keyword={{keyword}}&sort={{sort}}&sortField={{sortField}}"
+      >
+        <i class="fa-solid fa-arrow-left-long"></i
+      ></a>
     </li>
     {% for i in range %}
-        <li class="page-item {% if i == pageNum %}active{% endif %}"><a 
-          href="/employees/list/?page={{i}}&keyword={{keyword}}&sort={{sort}}&sortField={{sortField}}"
-          class="page-link">{{i}}</a></li>
+    <li class="page-item {% if i == pageNum %}active{% endif %}">
+      <a
+        href="/employees/list/?page={{i}}&keyword={{keyword}}&sort={{sort}}&sortField={{sortField}}"
+        class="page-link"
+        >{{i}}</a
+      >
+    </li>
     {% endfor %}
     <li class="page-item">
-        <a class="page-control link-next"
-        href="/employees/list/?{% if pageNum == totalPage %}page={{ pageNum }}{% else %}page={{pageNum|add:1 }}{% endif %}&keyword={{keyword}}&sort={{sort}}&sortField={{sortField}}">
-            <i class="fa-solid fa-arrow-right-long"></i
-            ></a>
+      <a
+        class="page-control link-next"
+        href="/employees/list/?{% if pageNum == totalPage %}page={{ pageNum }}{% else %}page={{pageNum|add:1 }}{% endif %}&keyword={{keyword}}&sort={{sort}}&sortField={{sortField}}"
+      >
+        <i class="fa-solid fa-arrow-right-long"></i
+      ></a>
     </li>
   </ul>
   {% endif %}
-  
 </div>
 <div id="infoEmployeeModal" class="modal fade">
   <div class="modal-dialog">
@@ -195,80 +251,82 @@
 </div>
 <div id="deleteEmployeeModal" class="modal fade">
   <div class="modal-dialog">
-      <div class="modal-content">
-          <form>
-              <div class="modal-header">
-                  <h4 class="modal-title">Delete Employee</h4>
-                  <button
-                          type="button"
-                          class="close"
-                          data-dismiss="modal"
-                          aria-hidden="true"
-                  >
-                      &times;
-                  </button>
-              </div>
-              <div class="modal-body">
-                  <p>Are you sure you want to delete this employee?</p>
-                  <p class="text-warning">
-                      <small>This action cannot be undone.</small>
-                  </p>
-              </div>
-              <div class="modal-footer">
-                  <input
-                          type="button"
-                          class="btn btn-default"
-                          data-dismiss="modal"
-                          value="Cancel"
-                  />
-                  <a href="" class="btn btn-danger but-delete">Delete</a>
-              </div>
-          </form>
-      </div>
+    <div class="modal-content">
+      <form>
+        <div class="modal-header">
+          <h4 class="modal-title">Delete Employee</h4>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-hidden="true"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this employee?</p>
+          <p class="text-warning">
+            <small>This action cannot be undone.</small>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <input
+            type="button"
+            class="btn btn-default"
+            data-dismiss="modal"
+            value="Cancel"
+          />
+          <a href="" class="btn btn-danger but-delete">Delete</a>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
 <script>
+  $(".search-icon").click(function () {
+    $(this).closest("form").submit();
+  });
   function fetchEmployeeDetail(id) {
     var csrf = $("input[name=csrfmiddlewaretoken]").val();
     $.ajax({
-      url: "http://127.0.0.1:8000/employees/detail/"+id+"/",
+      url: "http://127.0.0.1:8000/employees/detail/" + id + "/",
       method: "GET",
       success: function (response) {
         // response = JSON.parse(response)
-        let img = response.data.image
+        let img = response.data.image;
         let img_src = `{% static "image/avatar/img" %}`;
-        img_src = img_src.replace("img", img);        
-                $(`#name`).html(response.data.name);
-                $(`#email`).html(response.data.email);
-                $(`#birthday`).html(response.data.birthday);
-                $(`#address`).html(response.data.address);
-                let gender =  response.data.gender === true ? "Male" : "Female";
-                $(`#gender`).html(gender);
-                $(`#phone`).html(response.data.phone);
-                $(`#image`).attr("src", img_src);
-                $(`#department`).html(response.data.department);
-                $(`#salary`).html(response.data.salary);
-                $("#infoEmployeeModal").modal();
+        img_src = img_src.replace("img", img);
+        $(`#name`).html(response.data.name);
+        $(`#email`).html(response.data.email);
+        $(`#birthday`).html(response.data.birthday);
+        $(`#address`).html(response.data.address);
+        let gender = response.data.gender === true ? "Male" : "Female";
+        $(`#gender`).html(gender);
+        $(`#phone`).html(response.data.phone);
+        $(`#image`).attr("src", img_src);
+        $(`#department`).html(response.data.department);
+        $(`#salary`).html(response.data.salary);
+        $("#infoEmployeeModal").modal();
       },
       error: function (error) {
-          console.log(error);
+        console.log(error);
       },
-  });
-    }
-   $(document).ready(function (){
-    
-    message = $("#span-message").text()
+    });
+  }
+  $(document).ready(function () {
+    message = $("#span-message").text();
     console.log(message);
     if (message != "") {
-      setTimeout(function(){ 
-        $("#alert").fadeOut()
-        }, 2000);
+      setTimeout(function () {
+        $("#alert").fadeOut();
+      }, 2000);
     }
-    $(".link-delete").click(function(e){
-      e.preventDefault()
-      $("#deleteEmployeeModal").modal()
-      $(".but-delete").attr("href",$(this).attr("href"));
-    })
-   })
+    $(".link-delete").click(function (e) {
+      e.preventDefault();
+      $("#deleteEmployeeModal").modal();
+      $(".but-delete").attr("href", $(this).attr("href"));
+    });
+  });
 </script>
 {% endblock content %}

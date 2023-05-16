@@ -1,16 +1,18 @@
 import math
 from django.shortcuts import render
 from django.http import JsonResponse
-from admins.forms import AdminForm
 from admins.models import AdminApp
-from django.core import serializers
+from employees.models import Employee
 from django.db.models import Q
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
 
-
+@login_required
+@user_passes_test(lambda u: u.is_superuser, login_url='permission_error')
 def showAdminsList(request):
     per_page = 9
     keyword = request.GET.get('keyword')
@@ -22,12 +24,17 @@ def showAdminsList(request):
     if not sort:
         sort = "asc"
     reverseSortField = "desc" if sort == "asc" else "asc"
-    if not sortField:
-        sortField = "last_name"
+
+    if sortField is None:
+        sortField = "username"
+
+    if sortField != "username":
+        sortField = f"employee__{sortField}"
+
     admins = AdminApp.objects.all()
     if keyword:
-        admins = admins.filter(Q(username__icontains=keyword) | Q(first_name__icontains=keyword) | Q(
-            last_name__icontains=keyword) | Q(phone__icontains=keyword))
+        admins = admins.filter(Q(username__icontains=keyword) | Q(employee__firstName__icontains=keyword) | Q(
+            employee__lastName__icontains=keyword) | Q(employee__phone__icontains=keyword))
     if sort == "asc" and sortField:
         admins = admins.order_by(sortField)
     if sort == "desc" and sortField:
@@ -55,18 +62,23 @@ def showAdminsList(request):
     }
     return render(request, "admins.html", context)
 
-
+@login_required
+@user_passes_test(lambda u: u.is_superuser, login_url='permission_error')
 def getDetailOfAdmin(request, id):
     admin = AdminApp.objects.get(pk=id)
+    employee = Employee.objects.get(pk=admin.employee_id)
     json = {
-        'name': admin.first_name + ' ' + admin.last_name,
+        'name': employee.firstName + ' ' + employee.lastName,
         'username': admin.username,
-        'password': admin.password,
-        'phone': admin.phone,
+        'email': employee.email,
+        'phone': employee.phone,
+        'address': employee.address,
+        'type': 'Manager' if admin.is_superuser else 'Employee',
     }
     return JsonResponse({'data': json}, safe=False)
 
-
+@login_required
+@user_passes_test(lambda u: u.is_superuser, login_url='permission_error')
 def showAdminForm(request, id=0):
     if id == 0:
         admin = AdminApp()
@@ -74,63 +86,73 @@ def showAdminForm(request, id=0):
     else:
         admin = AdminApp.objects.get(pk=id)
         title = 'Update'
+    
+    employees = Employee.objects.all().order_by('firstName')
+
     context = {
         'admin': admin,
         'title': title,
-        'id': id
+        'id': id,
+        'employees': employees
     }
     return render(request, "admin_form.html", context)
 
-
+@login_required
+@user_passes_test(lambda u: u.is_superuser, login_url='permission_error')
 def saveAdmin(request):
     if request.method == "POST":
         id = int(request.POST.get('id'))
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
         username = request.POST.get('username')
         password = request.POST.get('password')
-        phone = request.POST.get('phone')
+
+        employee_id = request.POST.get('employee_id')
+        is_staff = int(request.POST.get('is_staff'))
         if id == 0:
-            admin = AdminApp(first_name=first_name, last_name=last_name,
-                             username=username, password=password, phone=phone)
+            admin = AdminApp(username=username)
+            admin.set_password(password)
+            admin.employee_id = employee_id
+            admin.is_staff = is_staff
+            admin.is_superuser = 0 if is_staff == 1 else 1
             admin.save()
-            messages.success(request, 'The admin was saved successfully.')
+            messages.success(request, 'Admin account saved successfully.')
         else:
             admin = AdminApp.objects.get(pk=id)
-            admin.first_name = first_name
-            admin.last_name = last_name
-            admin.password = password
-            admin.phone = phone
+            admin.employee_id = employee_id
+            admin.is_staff = is_staff
+            admin.is_superuser = 0 if is_staff == 1 else 1
+            if(password != ''):
+                admin.set_password(password)
             admin.save()
-            messages.success(request, 'The admin was edited successfully.')
+            messages.success(request, 'Admin account updated successfully.')
 
         # Truyền username vào biến keyword nếu username tồn tại, nếu không truyền chuỗi rỗng
         keyword = username if username else ''
         return redirect(f"/admins/list/?keyword={keyword}")
 
-
+@login_required
+@user_passes_test(lambda u: u.is_superuser, login_url='permission_error')
 def deleteAdmin(request, id):
     admin = AdminApp.objects.get(pk=id)
     admin.delete()
-    messages.success(request, 'The admin was deleted successfully.')
+    messages.success(request, 'Admin account deleted successfully.')
     return redirect('/admins/list/')
 
 
 @csrf_exempt
-def checkDuplicateUsernameAndPhone(request):
+def checkDuplicateUsernameAndEmployee(request):
     if request.method == 'POST':
         payload = request.body.decode('utf-8')
         data = json.loads(payload)
         id = int(data['id'])
-        phone = data['phone']
+        employee_id = int(data['employee_id'])
         username = data.get('username', None)
         if id == 0:
-            if AdminApp.objects.filter(username=username).exists() or AdminApp.objects.filter(phone=phone).exists():
+            if AdminApp.objects.filter(username=username).exists() or AdminApp.objects.filter(employee_id=employee_id).exists():
                 response = "Duplicated"
             else:
                 response = "Ok"
         else:
-            if AdminApp.objects.filter(username=username).exclude(id=id).exists() or AdminApp.objects.filter(phone=phone).exclude(id=id).exists():
+            if AdminApp.objects.filter(username=username).exclude(id=id).exists() or AdminApp.objects.filter(employee_id=employee_id).exclude(id=id).exists():
                 response = "Duplicated"
             else:
                 response = "Ok"

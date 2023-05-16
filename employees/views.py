@@ -2,18 +2,17 @@ import math
 from django.shortcuts import render
 from django.http import JsonResponse
 from salaries.models import Level_Salary
-from employees.forms import EmployeeForm
 from employees.models import Employee
 from departments.models import Department
-from django.core import serializers
 from django.db.models import Q
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 import json
-# Create your views here.
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
 
-
+@login_required
 def showEmployeesList(request):
     per_page = 7
     keyword = request.GET.get('keyword')
@@ -59,7 +58,7 @@ def showEmployeesList(request):
     }
     return render(request, "employees.html", context)
 
-
+@login_required
 def getDetailOfEmployee(request, id):
     employee = Employee.objects.get(pk=id)
     json = {
@@ -75,7 +74,8 @@ def getDetailOfEmployee(request, id):
     }
     return JsonResponse({'data': json}, safe=False)
 
-
+@login_required
+@user_passes_test(lambda u: u.is_superuser, login_url='permission_error')
 def showEmployeeForm(request, id=0):
     if id == 0:
         employee = Employee()
@@ -83,8 +83,8 @@ def showEmployeeForm(request, id=0):
     else:
         employee = Employee.objects.get(pk=id)
         title = 'Update'
-    departments = Department.objects.all()
-    salaries = Level_Salary.objects.all()
+    departments = Department.objects.all().order_by('name')
+    salaries = Level_Salary.objects.all().order_by('basicSalary')
     context = {
         'employee': employee,
         'departments': departments,
@@ -94,7 +94,8 @@ def showEmployeeForm(request, id=0):
     }
     return render(request, "employee_form.html", context)
 
-
+@login_required
+@user_passes_test(lambda u: u.is_superuser, login_url='permission_error')
 def saveEmployee(request):
     if request.method == "POST":
         id = int(request.POST.get('id'))
@@ -118,7 +119,7 @@ def saveEmployee(request):
             employee = Employee(firstName=firstName, lastName=lastname, email=email, birthday=birthday, address=address, gender=gender,
                                 phone=phone, image=image_file.name if image_file else 'default.jpg', department_id=id_department, salary_id=id_salary)
             employee.save()
-            messages.success(request, 'The employee was saved successfully.')
+            messages.success(request, 'Employee saved successfully.')
         else:
             employee = Employee.objects.get(pk=id)
             employee.firstName = firstName
@@ -132,16 +133,17 @@ def saveEmployee(request):
             employee.salary_id = id_salary
             employee.image = image_file.name if image_file else employee.image
             employee.save()
-            messages.success(request, 'The employee was edited successfully.')
-        # return render(request, "checkform.html", context)
+            messages.success(request, 'Employee edited successfully.')
         return redirect("/employees/list/?keyword="+email)
 
-
+@login_required
+@user_passes_test(lambda u: u.is_superuser, login_url='permission_error')
 def deleteEmployee(request, id):
     employee = Employee.objects.get(pk=id)
     employee.delete()
-    messages.success(request, 'The employee was deleted successfully.')
+    messages.success(request, 'Employee deleted successfully.')
     return redirect('/employees/list/')
+
 @csrf_exempt
 def checkDuplicateEmailAndPhone(request):
     if request.method == 'POST':
