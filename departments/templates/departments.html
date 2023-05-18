@@ -114,6 +114,10 @@
     {% endfor %}
   </ul>
   {% endif %}
+  {% if not departments %}
+  <h3><p class="text text-center">No matches found.</p></h3>
+  {% endif %}
+  {% if total_page > 1%}
   <ul class="pagination">
     <li class="page-item">
       {% if page_num == 1 %}
@@ -152,6 +156,7 @@
       {% endif %}
     </li>
   </ul>
+  {% endif %}
 </div>
 <div id="deleteDepartmentModal" class="modal fade">
   <div class="modal-dialog">

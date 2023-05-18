@@ -69,8 +69,8 @@ def getDetailOfEmployee(request, id):
         'gender': employee.gender,
         'phone': employee.phone,
         'image': str(employee.image),
-        'department': employee.department.name,
-        'salary': employee.salary.basicSalary
+        'department': employee.department.name if employee.department else "None",
+        'salary': employee.salary.basicSalary if employee.salary else "None"
     }
     return JsonResponse({'data': json}, safe=False)
 
