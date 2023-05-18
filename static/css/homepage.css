@@ -1,0 +1,96 @@
+.username_container {
+  position: absolute;
+  top: 20px;
+  right: 36px;
+}
+
+.homepage {
+  margin: 30px auto;
+  min-width: 1250px;
+  text-align: center;
+}
+
+.homepage-title {
+  margin: 0 0 15px;
+  font-size: 26px;
+  font-weight: 600;
+  color: #228be6;
+}
+
+.homepage-desc {
+  margin-top: 8px;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.homepage-text {
+  margin: 0;
+  margin-top: 16px;
+  margin-bottom: 12px;
+  font-size: 17px;
+}
+
+.homepage-text strong {
+  margin-left: 4px;
+  /* color: rgba(34, 139, 230); */
+}
+
+.homepage-text i {
+  color: #228be6;
+}
+
+.homepage-text.member {
+  margin-top: 30px;
+}
+
+.homepage-members {
+  margin: 5px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.homepage-card {
+  text-align: left;
+  margin: 0 5px;
+  padding: 10px 10px;
+  width: 290px;
+  height: fit-content;
+  background-color: rgba(231, 245, 255, 0.6);
+  box-shadow: 0px 6px 12px 0px rgba(34, 139, 230, 0.4);
+  border-radius: 15px;
+}
+
+.homepage-card p {
+  margin-top: 5px;
+  font-size: 16px;
+}
+
+.homepage-card strong {
+  display: inline-block;
+  width: 60px;
+}
+
+.homepage-feature {
+  text-align: left;
+  display: flex;
+  margin-left: 10px;
+  margin-right: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 350px;
+  border: 2px solid transparent;
+  background-color: rgba(231, 245, 255, 0.6);
+  box-shadow: 0px 6px 12px 0px rgba(34, 139, 230, 0.4);
+  border-radius: 15px;
+}
+
+.homepage-feature p {
+  font-size: 16px;
+  margin: 12px 0;
+}
+
+.homepage-text.feature {
+  margin-top: 50px;
+}

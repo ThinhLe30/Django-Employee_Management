@@ -1,0 +1,21 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+<div class="error">
+    <div class="error-info">
+        <span>Permission error </span>
+        <h2>The request page cannot be found.</h2>
+        <h3>An error has occurred while processing your request.</h3>
+        <h4>You may not be able to visit this page because of:</h4>
+        <ul>
+            <li>you have <strong>no access</strong> to this page (login to an manager's account to continue).</li>
+        </ul>
+        <a class="error-btn-homepage" href="{% url 'home:home' %}">Home page</a>
+    </div>
+    <div class="error-img">
+        <img src="{% static 'image/error/404error.svg' %}" />
+    </div>
+</div>
+</div>
+{% endblock content %}
