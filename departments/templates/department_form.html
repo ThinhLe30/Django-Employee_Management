@@ -1,0 +1,106 @@
+{% extends 'index.html' %} {% load static %} {% block content %}
+<div class="table-responsive">
+  <div class="table-wrapper">
+    <div class="table-header">
+      <div class="table-title">
+        <p>Manage</p>
+        <i class="fa-solid fa-circle"></i>
+        <a
+          href="{% url 'departments:list' %}"
+          style="text-decoration: none !important"
+          ><p class="text">Department</p></a
+        >
+      </div>
+      <div class="username_container">
+        <div class="username">
+          <p>{{ user.get_full_name }}</p><br>
+          <i class="fa-solid fa-circle-user"></i>
+        </div>
+        <p>{{ user.get_type }}</p>
+      </div>
+    </div>
+    <form
+      name="department_form"
+      class="form"
+      method="post"
+      action="/departments/save/"
+      style="max-width: 700px; margin: 3rem auto 0"
+      enctype="multipart/form-data"
+    >
+      {% csrf_token %}
+      <input type="hidden" name="id" value="{{id}}" />
+      <label for="name" class="label-input">
+        <span class="input-span">Name</span>
+        <div class="input-container">
+          <i class="ph-envelope"></i>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            class="input"
+            placeholder="Enter department name"
+            value="{{department.name}}"
+            autofocus
+            required
+          />
+        </div>
+      </label>
+      <label for="address" class="label-input">
+        <span class="input-span">Address</span>
+        <div class="input-container">
+          <i class="ph-envelope"></i>
+          <input
+            type="text"
+            name="address"
+            id="address"
+            class="input"
+            placeholder="Enter department address"
+            value="{{department.address}}"
+            autofocus
+            required
+          />
+        </div>
+      </label>
+      <label for="phoneNumber" class="label-input">
+        <span class="input-span">Phone Number</span>
+        <div class="input-container">
+          <i class="ph-envelope"></i>
+          <input
+            type="phoneNumber"
+            name="phoneNumber"
+            id="phoneNumber"
+            class="input"
+            placeholder="Enter department phone number"
+            value="{{department.phoneNumber}}"
+            autofocus
+            required
+          />
+        </div>
+      </label>
+      <label for="description" class="label-input">
+        <span class="input-span">Description</span>
+        <div class="input-container">
+          <i class="ph-envelope"></i>
+          <input
+            type="description"
+            name="description"
+            id="description"
+            class="input"
+            placeholder="Enter department description"
+            value="{{department.description}}"
+            autofocus
+            required
+          />
+        </div>
+      </label>
+      <button
+        type="submit"
+        class="btn-submit"
+        style="margin-bottom: 16px; margin-top: 0 !important"
+      >
+        Submit
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock content %}

@@ -5,7 +5,12 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
+    <title>Employee Management</title>
+    <link
+      rel="shortcut icon"
+      href="/static/image/logo/office.png"
+      type="image/x-icon"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -14,8 +19,8 @@
     />
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
-      integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
@@ -27,14 +32,19 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{% static 'css/index.css' %}" />
     <link rel="stylesheet" href="{% static 'css/form.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/error.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/homepage.css' %}" />
     <script src="{% static 'js/main.js' %}"></script>
   </head>
+
   <body>
     <div class="container">
       <div class="side">
         <div class="title">
           <img src="{% static 'image/logo/office.png' %}" alt="" />
-          <a href="{% url 'home:home' %}"><p>Management</p></a>
+          <a href="{% url 'home:home' %}">
+            <p>Management</p>
+          </a>
         </div>
         <ul class="nav">
           <li class="nav-list">
@@ -51,16 +61,20 @@
           </li>
           <li class="nav-list">
             <i class="nav-icon fa-solid fa-file-invoice-dollar"></i>
-            <p class="nav-text">Salary Level</p>
+            <p class="nav-text">
+              <a href="{% url 'salaries:list' %}">Salary Level</a>
+            </p>
           </li>
+          {% if user.is_superuser %}
           <li class="nav-list">
             <i class="nav-icon fa-solid fa-user"></i>
             <p class="nav-text"><a href="{% url 'admins:list' %}">Admin</a></p>
           </li>
+          {% endif %}
         </ul>
         <div class="logout">
           <div class="btn-logout">
-            <a href="#">
+            <a href="/logout/">
               Log out
               <i class="fa-solid fa-right-from-bracket"></i>
             </a>
