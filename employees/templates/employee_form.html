@@ -1,0 +1,262 @@
+{% extends 'index.html' %} {% load static %}  {% block content %}
+<div class="table-responsive">
+<div class="table-wrapper">
+    <div class="table-header">
+        <div class="table-title">
+          <p>Manage</p>
+          <i class="fa-solid fa-circle"></i>
+          <a
+            href="{% url 'employees:list' %}"
+            style="text-decoration: none !important"
+            ><p class="text">Employee</p></a
+          >
+        </div>
+        <div class="username_container">
+            <div class="username">
+              <p>{{ user.get_full_name }}</p><br>
+              <i class="fa-solid fa-circle-user"></i>
+            </div>
+            <p>{{ user.get_type }}</p>
+          </div>
+      </div>
+        <form name="employee_form" class="form"
+              method="post" action="/employees/save/"
+              style="max-width: 700px; margin: 3rem auto 0"
+              enctype="multipart/form-data"
+              onsubmit="return checkDuplicate(this);"
+        >
+            {% csrf_token %}
+            <input type="hidden" name ="id" value="{{id}}" id = "id">
+            <label for="firstname" class="label-input">
+                <span class="input-span">Firstname</span>
+                <div class="input-container">
+                    <i class="ph-envelope"></i>
+                    <input
+                            type="text"
+                            name="firstname"
+                            id="firstname"
+                            class="input"
+                            placeholder="Enter your firstname"
+                            value="{{employee.firstName}}"
+                            autofocus
+                            required
+
+                    />
+                </div>
+            </label>
+            <label for="lastname" class="label-input">
+                <span class="input-span">Lastname</span>
+                <div class="input-container">
+                    <i class="ph-envelope"></i>
+                    <input
+                            type="text"
+                            name="lastname"
+                            id="lastname"
+                            class="input"
+                            placeholder="Enter your lastname"
+                            value="{{employee.lastName}}"
+                            autofocus
+                            required
+                    />
+                </div>
+            </label>
+            <label for="email" class="label-input">
+                <span class="input-span">Email</span>
+                <div class="input-container">
+                    <i class="ph-envelope"></i>
+                    <input
+                            type="email"
+                            name="email"
+                            id="email"
+                            class="input"
+                            placeholder="Enter your email"
+                            value="{{employee.email}}"
+                            autofocus
+                            required
+                    />
+                </div>
+            </label>
+            <label for="birthday" class="label-input">
+                <span class="input-span">Birthday</span>
+                <div class="input-container">
+                    <i class="ph-envelope"></i>
+                    <input
+                            type="date"
+                            name="birthday"
+                            id="birthday"
+                            class="input"
+                            value="{{employee.birthday|date:'Y-m-d' }}"
+                            placeholder="Enter your birthday"
+                            autofocus
+                            required
+                    />
+                </div>
+            </label>
+            <label for="address" class="label-input">
+                <span class="input-span">Address</span>
+                <div class="input-container">
+                    <i class="ph-envelope"></i>
+                    <input
+                            type="text"
+                            name="address"
+                            id="address"
+                            class="input"
+                            placeholder="Enter your address"
+                            value="{{employee.address}}"
+                            autofocus
+                            required
+                    />
+                </div>
+            </label>
+            <label class="label-input">
+                <span class="input-span">Gender</span>
+                <div class="input-container">
+                    <i class="ph-envelope"></i>
+                    <span class="input-span">Male</span>
+                    <input type="radio" class="radio-input" name="gender" id="male" value="1" {% if employee.gender %}checked{% endif %}>
+                    <span class="input-span">Female</span>
+                    <input type="radio" class="radio-input" name="gender" id="female" value="0" {% if not employee.gender%}checked{% endif %}>
+                </div>
+            </label>
+            <label for="phone" class="label-input">
+                <span class="input-span">Phone Number</span>
+                <div class="input-container">
+                    <i class="ph-envelope"></i>
+                    <input
+                            type="text"
+                            name="phone"
+                            id="phone"
+                            class="input"
+                            placeholder="Enter your phone"
+                            value="{{employee.phone}}"
+                            onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                            autofocus
+                            required
+                    />
+                </div>
+            </label>
+            <input type="hidden" name="image_name" value="{{employee.image}}">
+            <label for="image" class="label-input">
+                <span class="input-span">Image</span>
+                <div class="input-container">
+                    <i class="ph-envelope"></i>
+                    <input
+                            type="file"
+                            name="image"
+                            id="image"
+                            class="input"
+                            placeholder="Enter your image"
+                            onchange="previewFile(this);"
+                            autofocus
+                    />
+                    <div class="avatar-form-container text-center">
+                        <img
+                                src="{% static 'image/avatar/' %}{{ employee.image }}"
+                                class="avatar-form"
+                                alt="Avatar"
+                        {% if not employee.image%}hidden{% endif %}
+                        />
+                    </div>
+                </div>
+            </label>
+            <label for="department" class="label-input">
+                <span class="input-span">Department</span>
+                <div class="input-container">
+                    <i class="ph-envelope"></i>
+                    <select name="id_department" id="department" class="input">
+                        {% for department in  departments %}
+                        <option value="{{department.id}}" {% if employee.department.id == department.id%}selected{% endif %}>{{department.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </label>
+            <label for="salary" class="label-input">
+                <span class="input-span">Basic Salary</span>
+                <div class="input-container">
+                    <i class="ph-envelope"></i>
+                    <select name="id_salary" id="salary" class="input">
+                        {% for salary in  salaries %}
+                        <option value="{{salary.id}}" {% if employee.salary.id == salary.id%}selected{% endif %}>{{salary.basicSalary}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </label>
+
+            <button type="submit" class="btn-submit" style="margin-bottom:16px; margin-top: 0!important; ">Submit</button>
+        </form>
+    </div>
+</div>
+<div id="messageModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header bg-primary">
+                    <h4 class="modal-title">Duplicated Email or Phone</h4>
+                    <button
+                            type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-hidden="true"
+                    >
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Another employee are currently using the email or phone number you have been entered. Please choose another one!</p>
+                </div>
+                <div class="modal-footer">
+                    <input
+                            type="button"
+                            class="btn btn-default"
+                            data-dismiss="modal"
+                            value="Ok"
+                    />
+                </div>
+            </form>
+        </div>
+    </div>
+  </div>
+</div>
+<script>
+    function checkDuplicate(form){
+        phone = ""+$('#phone').val()
+        id = ""+$('#id').val()
+        email = ""+$('#email').val()
+        $.ajax({
+                method : 'POST',
+                url: 'http://127.0.0.1:8000/employees/checkDuplicate/',
+                data: JSON.stringify({
+                    phone: phone,
+                    id: id,
+                    email: email
+                }),
+                contentType: 'application/json',
+                success: function(response) {
+                    if(response == "Ok"){
+                        form.submit();
+                        return true;
+                    }else{
+                        $("#messageModal").modal()
+                        return false;
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert(status);
+                    alert(error);
+                }
+            });
+        return false;
+    }
+    function previewFile(input) {
+        var file = $("input[type=file]").get(0).files[0];
+        if(file) {
+            var reader = new FileReader();
+            reader.onload = function() {
+                $(".avatar-form").attr("src", reader.result);
+                $(".avatar-form").attr("hidden", false);
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
+{% endblock content %}

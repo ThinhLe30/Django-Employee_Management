@@ -1,0 +1,51 @@
+.homepage {
+  margin: 20px 5px;
+  min-width: 1250px;
+}
+.homepage-title {
+  font-size: 25px;
+  font-weight: 600;
+  color: #228be6;
+}
+.homepage-desc {
+  margin-top: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.homepage-text {
+  margin: 0;
+  margin-top: 16px;
+  font-size: 18px;
+}
+.homepage-members {
+  margin: 5px 0;
+  padding: 0 5px;
+  display: flex;
+  justify-content: space-between;
+}
+.homepage-card {
+  margin: 0 5px;
+  padding: 10px 10px;
+  width: 320px;
+  height: fit-content;
+  background-color: rgba(231, 245, 255, 0.6);
+  box-shadow: 0px 6px 15px 0px rgba(34, 139, 230, 0.4);
+  border-radius: 15px;
+}
+.homepage-card p {
+  margin-top: 5px;
+  font-size: 16px;
+}
+.homepage-card strong {
+  display: inline-block;
+  width: 80px;
+}
+.homepage-feature {
+  margin-left: 20px;
+}
+.homepage-feature p {
+  font-size: 16px;
+  margin: 6.5px 0;
+}

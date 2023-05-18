@@ -1,0 +1,265 @@
+{% extends 'index.html' %} {% load static %} {% block content %}
+<div class="table-responsive">
+  <div class="table-wrapper">
+    <div class="table-header">
+      <div class="table-title">
+        <p>Manage</p>
+        <i class="fa-solid fa-circle"></i>
+        <a
+          href="{% url 'salaries:list' %}"
+          style="text-decoration: none !important"
+          ><p class="text">Salary Level</p></a
+        >
+      </div>
+      <div class="username_container">
+        <div class="username">
+          <p>{{ user.get_full_name }}</p><br>
+          <i class="fa-solid fa-circle-user"></i>
+        </div>
+        <p>{{ user.get_type }}</p>
+      </div>
+    </div>
+    <div class="table-control">
+      <div class="search">
+        <form action="?" method="get">
+          <input
+            name="keyword"
+            type="search"
+            class="search-input"
+            id="search-input"
+            placeholder="Search"
+            autocomplete="off"
+            value="{{keyword}}"
+          />
+          <i class="search-icon fa-solid fa-magnifying-glass"></i>
+        </form>
+      </div>
+      {% if user.is_superuser %}
+      <div class="add">
+        <a href="{% url 'salaries:add' %}" class="btn" data-toggle="modal">
+          <div class="tooltip">
+            <i class="add-icon fa-solid fa-plus"></i>
+            <p class="tooltiptext">Add new salary level</p>
+          </div></a
+        >
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  <table class="table table-striped table-hover table-borderless">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>
+          <a
+            href="/salaries/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=basicSalary"
+            >Basic Salary <i class="fa fa-sort" aria-hidden="true"></i
+          ></a>
+        </th>
+        <th>
+          <a
+            href="/salaries/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=coefficientPay"
+            >Coefficient Pay <i class="fa fa-sort" aria-hidden="true"></i
+          ></a>
+        </th>
+        <th>
+          <a
+            href="/salaries/list/?keyword={{keyword}}&sort={{reverseSortField}}&sortField=coefficientAllowance"
+          >
+            Coefficient Allowance <i class="fa fa-sort" aria-hidden="true"></i
+          ></a>
+        </th>
+
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for sal in level_salaries %}
+      <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{sal.basicSalary}}</td>
+        <td>{{sal.coefficientPay}}</td>
+        <td>{{sal.coefficientAllowance}}</td>
+        {% if user.is_superuser %}
+        <td class="td-action">
+          <a href="/salaries/edit/{{sal.id}}/" class="edit" data-toggle="modal">
+            <div class="tooltip">
+              <i class="edit-icon fa-solid fa-pen-to-square"></i>
+              <p class="tooltiptext">Edit</p>
+            </div>
+          </a>
+          <a
+            href="/salaries/delete/{{sal.id}}/"
+            class="delete link-delete"
+            data-toggle="modal"
+          >
+            <div class="tooltip">
+              <i class="delete-icon fa-solid fa-trash"></i>
+              <p class="tooltiptext">Delete</p>
+            </div>
+          </a>
+        </td>
+        {% else %}
+        <td class="td-action"></td>
+        {% endif %} {% endfor %}
+      </tr>
+    </tbody>
+  </table>
+  {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+    <div
+      class="alert alert-success text-center fixed-top"
+      role="alert"
+      id="alert"
+    >
+      <span id="span-message">{{ message }}</span>
+    </div>
+    {% endfor %}
+  </ul>
+  {% endif %} {% if not level_salaries %}
+  <h3><p class="text text-center">No matches found.</p></h3>
+  {% endif %} {% if totalPage > 1%}
+  <ul class="pagination">
+    <li class="page-item">
+      <a
+        class="page-control link-back"
+        href="/salaries/list/?{% if pageNum == 1 %}page={{ pageNum}}{% else %}page={{pageNum|add:-1 }}{% endif %}&keyword={{keyword}}&sort={{sort}}&sortField={{sortField}}"
+      >
+        <i class="fa-solid fa-arrow-left-long"></i
+      ></a>
+    </li>
+    {% for i in range %}
+    <li class="page-item {% if i == pageNum %}active{% endif %}">
+      <a
+        href="/salaries/list/?page={{i}}&keyword={{keyword}}&sort={{sort}}&sortField={{sortField}}"
+        class="page-link"
+        >{{i}}</a
+      >
+    </li>
+    {% endfor %}
+    <li class="page-item">
+      <a
+        class="page-control link-next"
+        href="/salaries/list/?{% if pageNum == totalPage %}page={{ pageNum }}{% else %}page={{pageNum|add:1 }}{% endif %}&keyword={{keyword}}&sort={{sort}}&sortField={{sortField}}"
+      >
+        <i class="fa-solid fa-arrow-right-long"></i
+      ></a>
+    </li>
+  </ul>
+  {% endif %}
+</div>
+<div id="infoLevel_SalaryModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form>
+        <div class="modal-header">
+          <h4 class="modal-title">Infomation Of Level Salary</h4>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-hidden="true"
+          >
+            &times
+          </button>
+        </div>
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Basic Salary: </label>
+            <span id="basicSalary"></span>
+          </div>
+          <div class="form-group">
+            <label>Coefficient Pay:</label>
+            <span id="coefficientPay"></span>
+          </div>
+
+          <div class="form-group">
+            <label>Coefficient Allowance: </label>
+            <span id="coefficientAllowance"></span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input
+            type="button"
+            class="btn btn-default"
+            data-dismiss="modal"
+            value="Cancel"
+          />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div id="deleteLevel_SalaryModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form>
+        <div class="modal-header">
+          <h4 class="modal-title">Delete Level Salary</h4>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-hidden="true"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this level salary?</p>
+          <p class="text-warning">
+            <small>This action cannot be undone.</small>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <input
+            type="button"
+            class="btn btn-default"
+            data-dismiss="modal"
+            value="Cancel"
+          />
+          <a href="" class="btn btn-danger but-delete">Delete</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  $(".search-icon").click(function () {
+    $(this).closest("form").submit();
+  });
+  function fetchLevel_SalaryDetail(id) {
+    var csrf = $("input[name=csrfmiddlewaretoken]").val();
+    $.ajax({
+      url: "http://127.0.0.1:8000/salaries/detail/" + id + "/",
+      method: "GET",
+      success: function (response) {
+        // response = JSON.parse(response)
+        $(`#basicSalary`).html(response.data.basicSalary);
+        $(`#coefficientPay`).html(response.data.coefficientPay);
+        $(`#coefficientAllowance`).html(response.data.coefficientAllowance);
+        $("#infoLevel_SalaryModal").modal();
+      },
+      error: function (error) {
+        console.log(error);
+      },
+    });
+  }
+  $(document).ready(function () {
+    message = $("#span-message").text();
+    console.log(message);
+    if (message != "") {
+      setTimeout(function () {
+        $("#alert").fadeOut();
+      }, 2000);
+    }
+    $(".link-delete").click(function (e) {
+      e.preventDefault();
+      $("#deleteLevel_SalaryModal").modal();
+      $(".but-delete").attr("href", $(this).attr("href"));
+    });
+  });
+</script>
+{% endblock content %}

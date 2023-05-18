@@ -1,0 +1,162 @@
+{% extends 'index.html' %} {% load static %} {% block content %}
+<div class="table-responsive">
+  <div class="table-wrapper">
+    <div class="table-header">
+      <div class="table-title">
+        <p>Manage</p>
+        <i class="fa-solid fa-circle"></i>
+        <a
+          href="{% url 'admins:list' %}"
+          style="text-decoration: none !important"
+          ><p class="text">Admin</p></a
+        >
+      </div>
+      <div class="username_container">
+        <div class="username">
+          <p>{{ user.get_full_name }}</p><br>
+          <i class="fa-solid fa-circle-user"></i>
+        </div>
+        <p>{{ user.get_type }}</p>
+      </div>
+    </div>
+    <form
+      name="admin_form"
+      class="form"
+      method="post"
+      action="/admins/save/"
+      style="max-width: 700px; margin: 3rem auto 0"
+      enctype="multipart/form-data"
+      onsubmit="return checkDuplicate(this);"
+    >
+      {% csrf_token %}
+      <div class="input-container">
+        <input class="input" type="hidden" name="id" value="{{id}}" id="id" />
+        <select class="input" id="employee_id" name="employee_id">
+          {% for employee in employees %}
+          <option value="{{employee.id}}" {% if admin.employee.id == employee.id%}selected{% endif %}>{{employee.firstName}} {{employee.lastName}} - {{employee.phone}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      {% if title != 'Update' %}
+      <label for="username" class="label-input">
+        <span class="input-span">Username</span>
+        <div class="input-container">
+          <i class="ph-envelope"></i>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            class="input"
+            placeholder="Enter your username"
+            value="{{admin.username}}"
+            autofocus
+            required
+          />
+        </div>
+      </label>
+      {% endif %}
+      <label for="password" class="label-input">
+        {% if title == 'Update' %}
+        <span style="color:#228BE6; font-style: italic; font-weight: 200;">Leave password blank if you don't want to update password</span>
+        {% endif %}
+        <span class="input-span">Password</span>
+        <div class="input-container">
+          <i class="ph-envelope"></i>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            class="input"
+            placeholder="Enter your password"
+            value=""
+            autofocus
+            {% if title != 'Update' %}required{% endif %}
+          />
+        </div>
+      </label>
+      <label for="is_staff" class="label-input">
+        <span class="input-span">Type</span>
+        <div class="input-container">
+          <i class="ph-envelope"></i>
+          <select class="input" id="is_staff" name="is_staff">
+            <option value="0" {% if admin.is_staff == 0%}selected{% endif %}>Manager</option>
+            <option value="1" {% if admin.is_staff == 1%}selected{% endif %}>Employee</option>
+          </select>
+        </div>
+      </label>
+      <button
+        type="submit"
+        class="btn-submit"
+        style="margin-bottom: 16px; margin-top: 0 !important"
+      >
+        Submit
+      </button>
+    </form>
+  </div>
+</div>
+<div
+  class="modal fade"
+  id="messageModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Duplicate information
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Another admin is currently using the username or the employee already has an admin account!
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function checkDuplicate(form) {
+    var employee_id = $("#employee_id").val();
+    var id = $("#id").val();
+    var username = $("#username").val();
+    $.ajax({
+      method: "POST",
+      url: "http://127.0.0.1:8000/admins/checkDuplicate/",
+      data: JSON.stringify({
+        employee_id: employee_id,
+        id: id,
+        username: username,
+      }),
+      contentType: "application/json",
+      success: function (response) {
+        if (response == "Ok") {
+          form.submit();
+        } else {
+          $("#messageModal").modal("show");
+        }
+      },
+      error: function (xhr, status, error) {
+        alert(status);
+        alert(error);
+      },
+    });
+    return false;
+  }
+</script>
+{% endblock content %}
